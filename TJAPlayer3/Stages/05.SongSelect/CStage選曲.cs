@@ -658,6 +658,13 @@ namespace TJAPlayer3
                                                     break;
                                                 case C曲リストノード.Eノード種別.BOX:
                                                     {
+
+                                                        // Pre-generate the favorite folder if the folder's genre is "Favorite"
+                                                        if (this.act曲リスト.r現在選択中の曲.strジャンル == "Favorite")
+                                                        {
+                                                            this.act曲リスト.r現在選択中の曲.list子リスト = CSongDict.tFetchFavoriteFolder(this.act曲リスト.r現在選択中の曲);
+                                                        }
+
                                                         CSongSelectSongManager.disable();
 
                                                         TJAPlayer3.Skin.sound決定音.t再生する();
@@ -693,7 +700,27 @@ namespace TJAPlayer3
                                         }
                                     }
                                     #endregion
+
                                 }
+
+                                #region [ Favorite ]
+
+                                if (!this.bスクロール中)
+                                {
+                                    if (TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.LeftControl))
+                                    {
+                                        CSongUniqueID csu = this.r現在選択中の曲.uniqueId;
+
+                                        if (csu != null)
+                                        {
+                                            TJAPlayer3.Skin.sound決定音.t再生する();
+                                            TJAPlayer3.Favorites.tToggleFavorite(csu.data.id);
+                                        }
+                                    }
+                                }
+
+                                #endregion
+
                                 #region [ Up ]
                                 if (!this.bスクロール中)
                                 {
@@ -714,6 +741,7 @@ namespace TJAPlayer3
                                     }
                                 }
                                 #endregion
+
                                 #region [ Down ]
                                 if (!this.bスクロール中)
                                 {

@@ -162,6 +162,9 @@
 10056 : "Hide Dan/Tower" option title
 10057 : "Hide Dan/Tower" description
 10084 : "Shin-uchi toggle" option title
+10090 : "System" description
+10091 : "Drums" description
+10092 : "Exit" description
 
 # Main Menu text (001XX)
 
@@ -189,6 +192,17 @@
 201 : Ensou recently played songs 
 202 : Ensou recently played songs description
 203 : Ensou randomly select song
+
+# Modal specific text (0030X)
+
+300 : Coins got !
+301 : Character got !
+302 : Puchichara got !
+303 : Title got !
+304 : Notice
+305 : Confirm
+306 : Coins
+307 : Total (coins)
 
 # Tower text (0100X)
 
@@ -224,5 +238,29 @@
 90002 : "Coin price : " condition message (ch)
 90003 : "Item bought !" succeed condition message (ch)
 90004 : "Not enough coins !" failed condition message (ch)
-90005 : "The following condition : " missing arguments error message 
+90005 : "The following condition : " missing arguments error message
+
+# In-game pause menu (90X)
+
+900 : Continue
+901 : Restart
+902 : Exit
+
+# Song selection page options (900X)
+
+9000 : Off
+9001 : On
+9002 : None
+9003 : Kimagure (きまぐれ)
+9004 : Detarame (でたらめ)
+9006 : Special Training Mode
+9007 : Null
+9008 : Speed
+9009 : DORON
+9010 : Flip Notes
+9011 : Random
+9012 : Game Mode
+9013 : Auto
+9014 : Voice
+9015 : Sound Type
 ```

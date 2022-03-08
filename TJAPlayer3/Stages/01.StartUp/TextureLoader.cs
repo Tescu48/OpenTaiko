@@ -1,4 +1,4 @@
-using FDK;
+﻿using FDK;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,6 +24,9 @@ namespace TJAPlayer3
         const string TOWERRESULT = @"8_TowerResult\";
         const string HEYA = @"10_Heya\";
         const string CHARACTERS = @"11_Characters\";
+        const string MODALS = @"11_Modals\";
+        const string ONLINELOUNGE = @"12_OnlineLounge\";
+        const string TOWERSELECT = @"13_TowerSelect\";
 
         // InGame
         const string CHARA = @"1_Chara\";
@@ -443,6 +446,12 @@ namespace TJAPlayer3
             Taiko_Combo[3] = TxC(GAME + TAIKO + @"Combo_Huge.png");
             Taiko_Combo_Effect = TxC(GAME + TAIKO + @"Combo_Effect.png");
             Taiko_Combo_Text = TxC(GAME + TAIKO + @"Combo_Text.png");
+
+            Taiko_Combo_Guide = new CTexture[3];
+            for (int i = 0; i < Taiko_Combo_Guide.Length; i++)
+            {
+                Taiko_Combo_Guide[i] = TxC(GAME + TAIKO + @"Combo_Guide" + i.ToString() + ".png");
+            }
             #endregion
 
             #region ゲージ
@@ -850,6 +859,8 @@ namespace TJAPlayer3
             Heya_Center_Menu_Box = TxC(HEYA + @"Center_Menu_Box.png");
             Heya_Center_Menu_Box_Slot = TxC(HEYA + @"Center_Menu_Box_Slot.png");
             Heya_Side_Menu = TxC(HEYA + @"Side_Menu.png");
+            Heya_Box = TxC(HEYA + @"Box.png");
+            Heya_Lock = TxC(HEYA + @"Lock.png");
 
             #endregion
 
@@ -927,12 +938,40 @@ namespace TJAPlayer3
 
             #endregion
 
-            
+            #region [11_Modals]
+
+            Modal_Full = new CTexture[6];
+            Modal_Half = new CTexture[6];
+            for (int i = 0; i < 5; i++)
+            {
+                Modal_Full[i] = TxC(MODALS + i.ToString() + @"_full.png");
+                Modal_Half[i] = TxC(MODALS + i.ToString() + @"_half.png");
+            }
+            Modal_Full[Modal_Full.Length - 1] = TxC(MODALS + @"Coin_full.png");
+            Modal_Half[Modal_Full.Length - 1] = TxC(MODALS + @"Coin_half.png");
+
+            #endregion
+
+            #region [12_OnlineLounge]
+
+            OnlineLounge_Background = TxC(ONLINELOUNGE + @"Background.png");
+            OnlineLounge_Box = TxC(ONLINELOUNGE + @"Box.png");
+            OnlineLounge_Center_Menu_Bar = TxC(ONLINELOUNGE + @"Center_Menu_Bar.png");
+            OnlineLounge_Center_Menu_Box_Slot = TxC(ONLINELOUNGE + @"Center_Menu_Box_Slot.png");
+            OnlineLounge_Side_Menu = TxC(ONLINELOUNGE + @"Side_Menu.png");
+            OnlineLounge_Song_Box = TxC(ONLINELOUNGE + @"Song_Box.png");
+
+            #endregion
+
+            #region [13_TowerSelect]
+
+            #endregion
+
         }
 
 
 
-        public void ReloadCharacter(int old, int newC, int player, bool primary = false)
+    public void ReloadCharacter(int old, int newC, int player, bool primary = false)
         {
             if (old == newC)
                 return;
@@ -1472,7 +1511,8 @@ namespace TJAPlayer3
             Taiko_PlayerNumber,
             Taiko_NamePlate; // ネームプレート
         public CTexture[] Taiko_Score,
-            Taiko_Combo;
+            Taiko_Combo,
+            Taiko_Combo_Guide;
         #endregion
         #region ゲージ
         public CTexture[] Gauge,
@@ -1678,7 +1718,9 @@ namespace TJAPlayer3
             Heya_Center_Menu_Bar,
             Heya_Center_Menu_Box,
             Heya_Center_Menu_Box_Slot,
-            Heya_Side_Menu;
+            Heya_Side_Menu,
+            Heya_Box,
+            Heya_Lock;
 
         #endregion
 
@@ -1706,6 +1748,28 @@ namespace TJAPlayer3
             Characters_Result_Donchan_Normal;
 
         public CTexture[] Characters_Heya_Preview;
+
+        #endregion
+
+        #region [11_Modals]
+
+        public CTexture[] Modal_Full,
+            Modal_Half;
+
+        #endregion
+
+        #region [12_OnlineLounge]
+
+        public CTexture OnlineLounge_Background,
+            OnlineLounge_Box,
+            OnlineLounge_Center_Menu_Bar,
+            OnlineLounge_Center_Menu_Box_Slot,
+            OnlineLounge_Side_Menu,
+            OnlineLounge_Song_Box;
+
+        #endregion
+
+        #region [13_TowerSelect]
 
         #endregion
 

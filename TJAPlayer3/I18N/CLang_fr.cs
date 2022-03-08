@@ -209,6 +209,9 @@ namespace TJAPlayer3
             [10058] = "Volume de la prévisualisation de la musique",
             [10059] = "Ajuste le volume de la prévisualisation de la musique.\nVous devez redemarrer le jeu pour que\ncette option prenne effet.",
             [10084] = "Mode Shin'uchi",
+            [10091] = "Settings for an overall systems.",
+            [10092] = "Settings to play the drums.",
+            [10093] = "Save the settings and exit from CONFIGURATION menu.",
 
 
             [100] = "Partie rapide",
@@ -234,6 +237,15 @@ namespace TJAPlayer3
             [202] = "Rejouez les sons joués précedement !",
             [203] = "Surprend moi !",
 
+            [300] = "Jetons obtenus !",
+            [301] = "Personnage obtenu !",
+            [302] = "Petit personnage obtenu !",
+            [303] = "Titre obtenu !",
+            [304] = "Notification",
+            [305] = "Confirmation",
+            [306] = "Jetons",
+            [307] = "Total",
+
             [1000] = "Étage atteint",
             [1001] = "",
             [1002] = "P",
@@ -257,10 +269,30 @@ namespace TJAPlayer3
 
             [90000] = "[ERREUR] Condition invalide",
             [90001] = "L'article n'est disponible que dans le Magasin.",
-            [90002] = "Prix en pièces : ",
+            [90002] = "Prix en jetons : ",
             [90003] = "Article acheté !",
-            [90004] = "Nombre de pièces insuffisant !",
+            [90004] = "Nombre de jetons insuffisant !",
             [90005] = "La condition suivante : ",
+
+            [900] = "Reprendre",
+            [901] = "Recommencer",
+            [902] = "Quitter",
+
+            [9000] = "Non",
+            [9001] = "Oui",
+            [9002] = "Aucun",
+            [9003] = "Hasardeux",
+            [9004] = "Chaotique",
+            [9006] = "Mode entraînement",
+            [9007] = "-",
+            [9008] = "Vitesse",
+            [9009] = "DORON",
+            [9010] = "Inverse",
+            [9011] = "Hasard",
+            [9012] = "Mode de jeu",
+            [9013] = "Auto",
+            [9014] = "Voix",
+            [9015] = "Instrument",
         };
     }
 }

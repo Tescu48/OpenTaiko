@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -219,6 +219,9 @@ namespace TJAPlayer3
             [10058] = "Song Preview Volume",
             [10059] = "Adjust the volume of song preview.\nYou must restart the game after leaving config\nfor this setting to save.",
             [10084] = "Shin'uchi Mode",
+            [10091] = "Settings for an overall systems.",
+            [10092] = "Settings to play the drums.",
+            [10093] = "Save the settings and exit from CONFIGURATION menu.",
 
             [100] = "Taiko Mode",
             [101] = "Dan-i Dojo",
@@ -242,6 +245,15 @@ namespace TJAPlayer3
             [201] = "Recently played songs",
             [202] = "Play recently played songs !",
             [203] = "Random song",
+
+            [300] = "Coins got !",
+            [301] = "Character got !",
+            [302] = "Puchichara got !",
+            [303] = "Title got !",
+            [304] = "Notice",
+            [305] = "Confirm",
+            [306] = "Coins",
+            [307] = "Total",
 
             [1000] = "Reached floor",
             [1001] = "F",
@@ -270,6 +282,26 @@ namespace TJAPlayer3
             [90003] = "Item bought !",
             [90004] = "Not enough coins !",
             [90005] = "The following condition : ",
+
+            [900] = "Resume",
+            [901] = "Restart",
+            [902] = "Quit",
+
+            [9000] = "Off",
+            [9001] = "On",
+            [9002] = "None",
+            [9003] = "Shuffle",
+            [9004] = "Chaos",
+            [9006] = "Training Mode",
+            [9007] = "-",
+            [9008] = "Speed",
+            [9009] = "DORON",
+            [9010] = "Flip Notes",
+            [9011] = "Random",
+            [9012] = "Game Mode",
+            [9013] = "Auto",
+            [9014] = "Voice",
+            [9015] = "Sound Type",
         };
     }
 }

@@ -268,6 +268,12 @@ namespace TJAPlayer3
 			private set;
 		}
 
+		public static Favorites Favorites
+        {
+			get;
+			private set;
+        }
+
 		public static Databases Databases
 		{
 			get;
@@ -2046,10 +2052,13 @@ for (int i = 0; i < 3; i++) {
 			//-----------------
 			#endregion
 
-			#region [ Config.ini の読込み ]
+			#region [ Read Config.ini and Database files ]
 			//---------------------
 			NamePlateConfig = new NamePlateConfig();
 			NamePlateConfig.tNamePlateConfig();
+
+			Favorites = new Favorites();
+			Favorites.tFavorites();
 
 			Databases = new Databases();
 			Databases.tDatabases();
@@ -2072,6 +2081,9 @@ for (int i = 0; i < 3; i++) {
 			}
 			this.Window.EnableSystemMenu = TJAPlayer3.ConfigIni.bIsEnabledSystemMenu;	// #28200 2011.5.1 yyagi
 			// 2012.8.22 Config.iniが無いときに初期値が適用されるよう、この設定行をifブロック外に移動
+			
+			// Init Modal fonts once config.ini parsing is done
+			Modal.tInitModalFonts();
 
 			//---------------------
 			#endregion
