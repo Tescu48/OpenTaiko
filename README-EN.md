@@ -7,7 +7,7 @@
 Fork of TJAPlayer3-Develop-ReWrite, a simulator for .tja files.
 Old TJAPlayer3-Develop-BSQ
 
-- Current version： Pre v0.5.3
+- Current version： v0.5.3
 
 - Discord : https://discord.gg/aA8scTvZ6B
 
@@ -147,7 +147,7 @@ If you do not want characters, make "(Skin name)/Graphics/11_Characters/0" empty
 	
 	- Chinese language support (WHMHammer)
 	
-	- Remove SlimDX dependencies (Mr Oiji)
+	- Remove SlimDX dependencies (Mr Ojii)
 	
 	- Add SimpleStyle skin (feat. cien)
 	
