@@ -18,9 +18,9 @@ namespace TJAPlayer3
 		{
 			base.eステージID = CStage.Eステージ.タイトル;
 			base.b活性化してない = true;
-			base.list子Activities.Add( this.actFIfromSetup = new CActFIFOBlack() );
-			base.list子Activities.Add( this.actFI = new CActFIFOBlack() );
-			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
+			base.list子Activities.Add(this.actFIfromSetup = new CActFIFOBlack());
+			base.list子Activities.Add(this.actFI = new CActFIFOBlack());
+			base.list子Activities.Add(this.actFO = new CActFIFOBlack());
 
 			base.list子Activities.Add(this.PuchiChara = new PuchiChara());
 
@@ -31,7 +31,7 @@ namespace TJAPlayer3
 
 		public override void On活性化()
 		{
-			Trace.TraceInformation( "タイトルステージを活性化します。" );
+			Trace.TraceInformation("タイトルステージを活性化します。");
 			Trace.Indent();
 			try
 			{
@@ -41,11 +41,32 @@ namespace TJAPlayer3
 
 				SkipSaveFileStep();
 
-				for (int i = 0; i < this.nbModes; i++)
+				usedMenus = new int[] {
+					0,
+					1,
+					5,
+					9,
+					8,
+					6,
+					7,
+
+					// -- Debug
+					/*
+					10,
+					11,
+					12,
+					13,
+					*/
+				};
+
+				usedMenusCount = usedMenus.Length;
+
+				usedMenusPos = new int[usedMenusCount];
+				for (int i = 0; i < usedMenusCount; i++)
 				{
-					this.stModeBar[i].BarTexture = TJAPlayer3.Tx.ModeSelect_Bar[i];
-					this.stModeBar[i].n現在存在している行 = i + 1 - n現在の選択行モード選択;
+					usedMenusPos[i] = i + 1 - n現在の選択行モード選択;
 				}
+
 
 				b音声再生 = false;
 				if (bSaveFileLoaded == false)
@@ -56,13 +77,13 @@ namespace TJAPlayer3
 			}
 			finally
 			{
-				Trace.TraceInformation( "タイトルステージの活性化を完了しました。" );
+				Trace.TraceInformation("タイトルステージの活性化を完了しました。");
 				Trace.Unindent();
 			}
 		}
 		public override void On非活性化()
 		{
-			Trace.TraceInformation( "タイトルステージを非活性化します。" );
+			Trace.TraceInformation("タイトルステージを非活性化します。");
 			Trace.Indent();
 			try
 			{
@@ -70,11 +91,18 @@ namespace TJAPlayer3
 			}
 			finally
 			{
-				Trace.TraceInformation( "タイトルステージの非活性化を完了しました。" );
+				Trace.TraceInformation("タイトルステージの非活性化を完了しました。");
 				Trace.Unindent();
 			}
 			base.On非活性化();
 		}
+
+		public void tReloadMenus()
+        {
+			if (this.pfMenuTitle != null && this.pfBoxText != null)
+				CMainMenuTab.tInitMenus(this.pfMenuTitle, this.pfBoxText);
+		}
+
 		public override void OnManagedリソースの作成()
 		{
 			if (base.b活性化してない)
@@ -90,23 +118,8 @@ namespace TJAPlayer3
 			else
 				this.pfBoxText = new CPrivateFastFont(new FontFamily("MS UI Gothic"), 15);
 
-			this.ttkEnsou = new TitleTextureKey(CLangManager.LangInstance.GetString(100), this.pfMenuTitle, Color.White, Color.FromArgb(233, 53, 71), 700, Color.Black);
-			this.ttkDan = new TitleTextureKey(CLangManager.LangInstance.GetString(101), this.pfMenuTitle, Color.White, Color.FromArgb(71, 64, 135), 700, Color.Black);
-			this.ttkTower = new TitleTextureKey(CLangManager.LangInstance.GetString(102), this.pfMenuTitle, Color.White, Color.FromArgb(255, 180, 42), 700, Color.Black);
-			this.ttkShop = new TitleTextureKey(CLangManager.LangInstance.GetString(103), this.pfMenuTitle, Color.White, Color.FromArgb(16, 255, 255), 700, Color.Black);
-			this.ttkBouken = new TitleTextureKey(CLangManager.LangInstance.GetString(104), this.pfMenuTitle, Color.White, Color.FromArgb(128, 0, 128), 700, Color.Black);
-			this.ttkSettings = new TitleTextureKey(CLangManager.LangInstance.GetString(106), this.pfMenuTitle, Color.White, Color.FromArgb(128, 128, 128), 700, Color.Black);
-			this.ttkExit = new TitleTextureKey(CLangManager.LangInstance.GetString(107), this.pfMenuTitle, Color.White, Color.FromArgb(72, 72, 72), 700, Color.Black);
-
-			this.ttkHeya = new TitleTextureKey(CLangManager.LangInstance.GetString(105), this.pfMenuTitle, Color.White, Color.FromArgb(24, 128, 24), 700, Color.Black);
-
-			this.ttkBoxText = new TitleTextureKey[(int)E戻り値.EXIT];
-
-			for (int i = 0; i < this.ttkBoxText.Length; i++)
-            {
-				this.ttkBoxText[i] = new TitleTextureKey(CLangManager.LangInstance.GetString(150 + i), this.pfBoxText, Color.White, Color.Black, 1000);
-            }
-
+			// Init Menus
+			tReloadMenus();
 
 			base.OnManagedリソースの作成();
 		}
@@ -122,13 +135,13 @@ namespace TJAPlayer3
 		}
 		public override int On進行描画()
 		{
-			if( !base.b活性化してない )
+			if (!base.b活性化してない)
 			{
 				#region [ 初めての進行描画 ]
 				//---------------------
-				if ( base.b初めての進行描画 )
+				if (base.b初めての進行描画)
 				{
-					if( TJAPlayer3.r直前のステージ == TJAPlayer3.stage起動 )
+					if (TJAPlayer3.r直前のステージ == TJAPlayer3.stage起動)
 					{
 						this.actFIfromSetup.tフェードイン開始();
 						base.eフェーズID = CStage.Eフェーズ.タイトル_起動画面からのフェードイン;
@@ -139,7 +152,7 @@ namespace TJAPlayer3
 						base.eフェーズID = CStage.Eフェーズ.共通_フェードイン;
 					}
 					base.b初めての進行描画 = false;
-                }
+				}
 				//---------------------
 				#endregion
 
@@ -149,30 +162,28 @@ namespace TJAPlayer3
 				this.ctエントリーバー点滅.t進行Loop();
 				this.ctエントリーバー決定点滅.t進行();
 				this.ctどんちゃんイン.t進行();
-				this.ctどんちゃんループ.t進行Loop();
-				this.ctどんちゃんエントリーループ.t進行Loop();
 				this.ctBarMove.t進行();
 
 				if (!TJAPlayer3.Skin.bgmタイトルイン.b再生中)
-                {
-                    if (TJAPlayer3.ConfigIni.bBGM音を発声する && !b音声再生)
+				{
+					if (TJAPlayer3.ConfigIni.bBGM音を発声する && !b音声再生)
 					{
 						TJAPlayer3.Skin.bgmタイトル.t再生する();
 						b音声再生 = true;
 					}
-                }
+				}
 
-                // 進行
+				// 進行
 
-                #region [ キー関係 ]
+				#region [ キー関係 ]
 
-                if (base.eフェーズID == CStage.Eフェーズ.共通_通常状態        // 通常状態、かつ
+				if (base.eフェーズID == CStage.Eフェーズ.共通_通常状態        // 通常状態、かつ
 					&& TJAPlayer3.act現在入力を占有中のプラグイン == null)    // プラグインの入力占有がない
 				{
-					if (TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Escape))
-                    {
+					if (TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Escape) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.Cancel))
+					{
 						if (bモード選択)
-                        {
+						{
 							TJAPlayer3.Skin.sound取消音.t再生する();
 							bSaveFileLoaded = false;
 							UnloadSaveFile();
@@ -182,41 +193,49 @@ namespace TJAPlayer3
 						else
 							return (int)E戻り値.EXIT;
 					}
-						
 
+
+					// Disable F1 keybind since menu is accessible from main menu
+					/*
 					if ((TJAPlayer3.Input管理.Keyboard.bキーが押されている((int)SlimDXKeys.Key.RightShift) || TJAPlayer3.Input管理.Keyboard.bキーが押されている((int)SlimDXKeys.Key.LeftShift)) && TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.F1))
 					{
 						TJAPlayer3.Skin.soundEntry.t停止する();
+						
 						n現在の選択行モード選択 = (int)E戻り値.CONFIG - 1;
+
 						this.actFO.tフェードアウト開始();
 						base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
 						TJAPlayer3.Skin.sound取消音.t再生する();
 					}
+					*/
 
 					// 1st step (Save file loading)
 					if (!bバナパス読み込み && !bバナパス読み込み失敗)
 					{
-						
-						if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RRed) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LRed))
-                        {
+
+						if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.Decide) ||
+							TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RRed) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LRed))
+						{
 							// Hit 1P banapass
 							TJAPlayer3.SaveFile = 0;
+							CMenuCharacter.tMenuResetTimer(CMenuCharacter.ECharacterAnimation.ENTRY_NORMAL);
 							this.ctバナパス読み込み待機.t開始(0, 600, 1, TJAPlayer3.Timer);
 							this.ctバナパス読み込み待機.n現在の値 = (int)this.ctバナパス読み込み待機.n終了値;
 							for (int i = 0; i < 2; i++)
 								TJAPlayer3.NamePlate.tNamePlateRefreshTitles(i);
 						}
 						else if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RRed2P) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LRed2P))
-                        {
+						{
 							// Hit 2P banapass
 							TJAPlayer3.SaveFile = 1;
+							CMenuCharacter.tMenuResetTimer(CMenuCharacter.ECharacterAnimation.ENTRY_NORMAL);
 							this.ctバナパス読み込み待機.t開始(0, 600, 1, TJAPlayer3.Timer);
 							this.ctバナパス読み込み待機.n現在の値 = (int)this.ctバナパス読み込み待機.n終了値;
 							for (int i = 0; i < 2; i++)
 								TJAPlayer3.NamePlate.tNamePlateRefreshTitles(i);
 						}
 						else
-                        {
+						{
 							// Default legacy P long press (Don't change the save file, will be deleted soon)
 							if (TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.P))
 								this.ctバナパス読み込み待機.t開始(0, 600, 1, TJAPlayer3.Timer);
@@ -234,11 +253,11 @@ namespace TJAPlayer3
 						}
 					}
 
-					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RBlue) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.RightArrow))
-                    {
-						if(bプレイヤーエントリー && !bプレイヤーエントリー決定 && this.ctバナパス読み込み成功.b終了値に達した)
-                        {
-							if(n現在の選択行プレイヤーエントリー + 1 <= 2)
+					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RightChange) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.RightArrow))
+					{
+						if (bプレイヤーエントリー && !bプレイヤーエントリー決定 && this.ctバナパス読み込み成功.b終了値に達した)
+						{
+							if (n現在の選択行プレイヤーエントリー + 1 <= 2)
 							{
 								TJAPlayer3.Skin.sound変更音.t再生する();
 								n現在の選択行プレイヤーエントリー += 1;
@@ -247,45 +266,52 @@ namespace TJAPlayer3
 
 						if (bモード選択)
 						{
-							if (n現在の選択行モード選択 < this.nbModes - 1)
+							//if (n現在の選択行モード選択 < this.nbModes - 1)
+							if (n現在の選択行モード選択 < usedMenusCount - 1)
 							{
 								TJAPlayer3.Skin.sound変更音.t再生する();
 								ctBarMove.t開始(0, 250, 1.2f, TJAPlayer3.Timer);
 								n現在の選択行モード選択++;
 								this.bDownPushed = true;
-								for (int i = 0; i < this.nbModes; i++)
-									this.stModeBar[i].n現在存在している行 = i + 1 - n現在の選択行モード選択;
+
+								for (int i = 0; i < usedMenusCount; i++)
+								{
+									usedMenusPos[i] = i + 1 - n現在の選択行モード選択;
+								}
 							}
 						}
 					}
 
-					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LBlue)||TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.LeftArrow))
-                    {
-						if(bプレイヤーエントリー && !bプレイヤーエントリー決定 && this.ctバナパス読み込み成功.b終了値に達した)
-                        {
-							if(n現在の選択行プレイヤーエントリー - 1 >= 0)
+					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LeftChange) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.LeftArrow))
+					{
+						if (bプレイヤーエントリー && !bプレイヤーエントリー決定 && this.ctバナパス読み込み成功.b終了値に達した)
+						{
+							if (n現在の選択行プレイヤーエントリー - 1 >= 0)
 							{
 								TJAPlayer3.Skin.sound変更音.t再生する();
 								n現在の選択行プレイヤーエントリー -= 1;
 							}
-                        }
+						}
 
 						if (bモード選択)
 						{
-							if(n現在の選択行モード選択 > 0)
+							if (n現在の選択行モード選択 > 0)
 							{
 								TJAPlayer3.Skin.sound変更音.t再生する();
 								ctBarMove.t開始(0, 250, 1.2f, TJAPlayer3.Timer);
 								n現在の選択行モード選択--;
 								this.bDownPushed = false;
-								for (int i = 0; i < this.nbModes; i++)
-									this.stModeBar[i].n現在存在している行 = i + 1 - n現在の選択行モード選択;
+
+								for (int i = 0; i < usedMenusCount; i++)
+								{
+									usedMenusPos[i] = i + 1 - n現在の選択行モード選択;
+								}
 							}
 						}
-                    }
+					}
 
 
-					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RRed) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LRed) 
+					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.Decide)
 						|| TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Return))
 					{
 						if (bプレイヤーエントリー && this.ctバナパス読み込み成功.b終了値に達した)
@@ -317,19 +343,18 @@ namespace TJAPlayer3
 						{
 							bool operationSucceded = false;
 
-							if (this.n現在の選択行モード選択 == (int)E戻り値.DANGAMESTART - 1)
+							if (CMainMenuTab.__Menus[usedMenus[this.n現在の選択行モード選択]].rp == E戻り値.DANGAMESTART)
 							{
 								if (TJAPlayer3.Songs管理.list曲ルート_Dan.Count > 0 && TJAPlayer3.ConfigIni.nPlayerCount != 2)
 									operationSucceded = true;
 							}
-							else if (this.n現在の選択行モード選択 == (int)E戻り値.GAMESTART - 1
-								|| this.n現在の選択行モード選択 == (int)E戻り値.EXIT - 1
-								|| this.n現在の選択行モード選択 == (int)E戻り値.CONFIG - 1
-								|| this.n現在の選択行モード選択 == (int)E戻り値.HEYA - 1)
+							else if (CMainMenuTab.__Menus[usedMenus[this.n現在の選択行モード選択]].implemented == true
+								&& (CMainMenuTab.__Menus[usedMenus[this.n現在の選択行モード選択]]._1pRestricted == false
+								|| TJAPlayer3.ConfigIni.nPlayerCount == 1))
 								operationSucceded = true;
 
 							if (operationSucceded == true)
-                            {
+							{
 								TJAPlayer3.Skin.sound決定音.t再生する();
 								this.actFO.tフェードアウト開始(0, 500);
 								base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
@@ -341,7 +366,7 @@ namespace TJAPlayer3
 
 					if (ctバナパス読み込み待機.n現在の値 >= 500)
 					{
-                        if (!bバナパス読み込み)
+						if (!bバナパス読み込み)
 						{
 							TJAPlayer3.Skin.soundEntry.t停止する();
 							ctバナパス読み込み成功.t開始(0, 3655, 1, TJAPlayer3.Timer);
@@ -350,30 +375,30 @@ namespace TJAPlayer3
 					}
 
 					if (ctエントリーバー決定点滅.n現在の値 >= 1055)
-                    {
-                        if (!bモード選択)
-                        {
+					{
+						if (!bモード選択)
+						{
 							if (!TJAPlayer3.Skin.soundsanka.bPlayed)
 								TJAPlayer3.Skin.soundsanka.t再生する();
 
 							ctどんちゃんイン.t開始(0, 180, 2, TJAPlayer3.Timer);
 							ctBarAnimeIn.t開始(0, 1295, 1, TJAPlayer3.Timer);
 							bモード選択 = true;
-                        }
-                    }
+						}
+					}
 				}
 
 				#endregion
 
 				#region [ 背景描画 ]
 
-				if (TJAPlayer3.Tx.Title_Background != null )
-                    TJAPlayer3.Tx.Title_Background.t2D描画( TJAPlayer3.app.Device, 0, 0 );
-				
-                #endregion
+				if (TJAPlayer3.Tx.Title_Background != null)
+					TJAPlayer3.Tx.Title_Background.t2D描画(TJAPlayer3.app.Device, 0, 0);
+
+				#endregion
 
 				if (bSaveFileLoaded == false)
-                {
+				{
 					#region [ バナパス読み込み ]
 
 					if (!bバナパス読み込み && !bバナパス読み込み失敗)
@@ -509,7 +534,9 @@ namespace TJAPlayer3
 				{
 					if (!this.bどんちゃんカウンター初期化)
 					{
-						this.ctどんちゃんエントリーループ = new CCounter(0, TJAPlayer3.Tx.Donchan_Entry.Length - 1, 1000 / 60, TJAPlayer3.Timer);
+						//this.ctどんちゃんエントリーループ = new CCounter(0, TJAPlayer3.Tx.Donchan_Entry.Length - 1, 1000 / 60, TJAPlayer3.Timer);
+						CMenuCharacter.tMenuResetTimer(CMenuCharacter.ECharacterAnimation.ENTRY);
+
 						this.bどんちゃんカウンター初期化 = true;
 					}
 
@@ -518,12 +545,24 @@ namespace TJAPlayer3
 					TJAPlayer3.Tx.Entry_Player[0].Opacity = alpha;
 					TJAPlayer3.Tx.Entry_Player[1].Opacity = alpha;
 
+					/*
+					var ___ttx = CMenuCharacter._getReferenceArray(0, CMenuCharacter.ECharacterAnimation.ENTRY)
+						[CMenuCharacter._getReferenceCounter(CMenuCharacter.ECharacterAnimation.ENTRY)[0].n現在の値];
+					___ttx.Opacity = alpha;
+					*/
 
-					TJAPlayer3.Tx.Donchan_Entry[this.ctどんちゃんエントリーループ.n現在の値].Opacity = alpha;
+					//TJAPlayer3.Tx.Donchan_Entry[this.ctどんちゃんエントリーループ.n現在の値].Opacity = alpha;
 
 					TJAPlayer3.Tx.Entry_Player[0].t2D描画(TJAPlayer3.app.Device, 0, 0);
 
-					TJAPlayer3.Tx.Donchan_Entry[this.ctどんちゃんエントリーループ.n現在の値].t2D描画(TJAPlayer3.app.Device, 485, 140);
+					//TJAPlayer3.Tx.Donchan_Entry[this.ctどんちゃんエントリーループ.n現在の値].t2D描画(TJAPlayer3.app.Device, 485, 140);
+					int _charaId = TJAPlayer3.NamePlateConfig.data.Character[TJAPlayer3.GetActualPlayer(0)];
+					CMenuCharacter.tMenuDisplayCharacter(0, TJAPlayer3.Skin.Characters_Title_Entry_X[_charaId][TJAPlayer3.GetActualPlayer(0)], 
+						TJAPlayer3.Skin.Characters_Title_Entry_Y[_charaId][TJAPlayer3.GetActualPlayer(0)], CMenuCharacter.ECharacterAnimation.ENTRY, alpha);
+
+					//___ttx.Opacity = 255;
+
+
 					this.PuchiChara.On進行描画(485 + 100, 140 + 190, false, alpha);
 
 					TJAPlayer3.Tx.Entry_Player[2].Opacity = ctエントリーバー決定点滅.n現在の値 >= 800 ? 255 - (ctエントリーバー決定点滅.n現在の値 - 800) : (this.ctバナパス読み込み成功.n現在の値 - 3400) - (this.ctエントリーバー点滅.n現在の値 <= 255 ? this.ctエントリーバー点滅.n現在の値 : 255 - (this.ctエントリーバー点滅.n現在の値 - 255));
@@ -574,14 +613,27 @@ namespace TJAPlayer3
 
 					#region [ どんちゃん描画 ]
 
-					float DonchanX = 0f, DonchanY = 0f;
+					for (int player = 0; player < TJAPlayer3.ConfigIni.nPlayerCount; player++)
+					{
+						float DonchanX = 0f, DonchanY = 0f;
 
-					DonchanX = (float)Math.Sin(ctどんちゃんイン.n現在の値 / 2 * (Math.PI / 180)) * 200f;
-					DonchanY = ( (float)Math.Sin((90 + (ctどんちゃんイン.n現在の値 / 2)) * (Math.PI / 180)) * 150f);
+						DonchanX = -200 + ((float)Math.Sin(ctどんちゃんイン.n現在の値 / 2 * (Math.PI / 180)) * 200f);
+						DonchanY = ((float)Math.Sin((90 + (ctどんちゃんイン.n現在の値 / 2)) * (Math.PI / 180)) * 150f);
+						if (player == 1) DonchanX *= -1;
 
-					TJAPlayer3.Tx.Entry_Donchan_Normal[ctどんちゃんループ.n現在の値].t2D描画(TJAPlayer3.app.Device, -200 + DonchanX, 341 - DonchanY);
+						int _charaId = TJAPlayer3.NamePlateConfig.data.Character[TJAPlayer3.GetActualPlayer(player)];
 
-					this.PuchiChara.On進行描画(0 + 100, 330 + 230, false);
+						int chara_x = (int)(TJAPlayer3.Skin.Characters_Title_Normal_X[_charaId][player] + DonchanX);
+						int chara_y = (int)(TJAPlayer3.Skin.Characters_Title_Normal_Y[_charaId][player] - DonchanY);
+
+						//TJAPlayer3.Tx.Entry_Donchan_Normal[ctどんちゃんループ.n現在の値].t2D描画(TJAPlayer3.app.Device, -200 + DonchanX, 341 - DonchanY);
+						CMenuCharacter.tMenuDisplayCharacter(player, chara_x, chara_y, CMenuCharacter.ECharacterAnimation.ENTRY_NORMAL);
+
+						int puchi_x = player == 0 ? 0 + 100 : 981 + 250;
+						int puchi_y = player == 0 ? 330 + 230 : 330 + 230;
+
+						this.PuchiChara.On進行描画(puchi_x, puchi_y, false);
+					}
 
 					#endregion
 
@@ -589,49 +641,67 @@ namespace TJAPlayer3
 					{
 						// TJAPlayer3.act文字コンソール.tPrint(0, 0, C文字コンソール.Eフォント種別.白, ctBarMove.n現在の値.ToString());
 
-						for (int i = 0; i < this.nbModes; i++)
-                        {
-							if(this.stModeBar[i].n現在存在している行 == 1 && ctBarMove.n現在の値 >= 150)
+						//for (int i = 0; i < this.nbModes; i++)
+						for (int i = 0; i < usedMenusCount; i++)
+						{
+							// Get Menu reference
+							CMainMenuTab _menu = CMainMenuTab.__Menus[usedMenus[i]];
+							CTexture _bar = _menu.barTex;
+							CTexture _chara = _menu.barChara;
+
+							#region [Disable visualy 1p specific buttons if 2p]
+
+							if ((_menu._1pRestricted == true && TJAPlayer3.ConfigIni.nPlayerCount > 1)
+								|| _menu.implemented == false)
+							{
+								if (_bar != null)
+									_bar.color4 = C変換.ColorToColor4(Color.DarkGray);
+								if (_chara != null)
+									_chara.color4 = C変換.ColorToColor4(Color.DarkGray);
+								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(_menu.ttkBoxText).color4 = C変換.ColorToColor4(Color.DarkGray);
+								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(_menu.ttkTitle).color4 = C変換.ColorToColor4(Color.DarkGray);
+							}
+							else
+							{
+								if (_bar != null)
+									_bar.color4 = C変換.ColorToColor4(Color.White);
+								if (_chara != null)
+									_chara.color4 = C変換.ColorToColor4(Color.White);
+								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(_menu.ttkBoxText).color4 = C変換.ColorToColor4(Color.White);
+								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(_menu.ttkTitle).color4 = C変換.ColorToColor4(Color.White);
+							}
+
+							#endregion
+
+							// if (this.stModeBar[i].n現在存在している行 == 1 && ctBarMove.n現在の値 >= 150)
+							if (usedMenusPos[i] == 1 && ctBarMove.n現在の値 >= 150)
 							{
 								int BarAnime = ctBarAnimeIn.n現在の値 >= (int)(26 * 16.6f) + 100 ? 0 : ctBarAnimeIn.n現在の値 >= (int)(26 * 16.6f) && ctBarAnimeIn.n現在の値 <= (int)(26 * 16.6f) + 100 ? 40 + (int)((ctBarAnimeIn.n現在の値 - (26 * 16.6)) / 100f * 71f) : ctBarAnimeIn.n現在の値 < (int)(26 * 16.6f) ? 40 : 111;
 								int BarAnime1 = BarAnime == 0 ? ctBarMove.n現在の値 >= 150 ? 40 + (int)((ctBarMove.n現在の値 - 150) / 100f * 71f) : ctBarMove.n現在の値 < 150 ? 40 : 111 : 0;
 
-                                #region [Disable visualy 1p specific buttons if 2p]
-
-                                if (restricted1p[i] == true && TJAPlayer3.ConfigIni.nPlayerCount > 1)
+								if (_bar != null)
 								{
-									TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].color4 = C変換.ColorToColor4(Color.DarkGray);
-									TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(idxToTex(i)).color4 = C変換.ColorToColor4(Color.DarkGray);
-									this.stModeBar[i].BarTexture.color4 = C変換.ColorToColor4(Color.DarkGray);
-									TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(this.ttkBoxText[i]).color4 = C変換.ColorToColor4(Color.DarkGray);
-								}
-								else
-                                {
-									TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].color4 = C変換.ColorToColor4(Color.White);
-									TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(idxToTex(i)).color4 = C変換.ColorToColor4(Color.White);
-									this.stModeBar[i].BarTexture.color4 = C変換.ColorToColor4(Color.White);
-									TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(this.ttkBoxText[i]).color4 = C変換.ColorToColor4(Color.White);
+									_bar.Opacity = 255;
+									_bar.vc拡大縮小倍率.Y = 1.0f;
+									_bar.t2D描画(TJAPlayer3.app.Device, 320, 347 - BarAnime - BarAnime1, new Rectangle(0, 0, 641, 27));
+									_bar.t2D描画(TJAPlayer3.app.Device, 320, 346 + BarAnime + BarAnime1, new Rectangle(0, 76, 641, 30));
+									_bar.vc拡大縮小倍率.Y = BarAnime / 25.7f + BarAnime1 / 25.7f;
+									_bar.t2D拡大率考慮中央基準描画(TJAPlayer3.app.Device, 640, 360, new Rectangle(0, 27, 641, 45));
 								}
 
-								#endregion
 
-								// this.stModeBar[i].BarTexture.Opacity = (int)((ctBarAnimeIn.n現在の値 - (16 * 16.6f)) * 1.23f);
+								if (TJAPlayer3.Tx.ModeSelect_Bar[CMainMenuTab.__MenuCount] != null)
+								{
+									CTexture _overlap = TJAPlayer3.Tx.ModeSelect_Bar[CMainMenuTab.__MenuCount];
 
-								this.stModeBar[i].BarTexture.Opacity = 255;
+									_overlap.vc拡大縮小倍率.Y = 1.0f;
+									_overlap.t2D描画(TJAPlayer3.app.Device, 320, 306, new Rectangle(0, 0, 641, 27));
+									_overlap.t2D描画(TJAPlayer3.app.Device, 320, 334 + (BarAnime + BarAnime1) / 0.95238f, new Rectangle(0, 71, 641, 35));
+									_overlap.vc拡大縮小倍率.Y = (BarAnime + BarAnime1) / 0.95238f;
+									_overlap.t2D拡大率考慮上中央基準描画(TJAPlayer3.app.Device, 640, 333, new Rectangle(0, 27, 641, 1));
 
-								this.stModeBar[i].BarTexture.vc拡大縮小倍率.Y = 1.0f;
-								this.stModeBar[i].BarTexture.t2D描画(TJAPlayer3.app.Device, 320, 347 - BarAnime - BarAnime1, new Rectangle(0, 0, 641, 27));
-								this.stModeBar[i].BarTexture.t2D描画(TJAPlayer3.app.Device, 320, 346 + BarAnime + BarAnime1, new Rectangle(0, 76, 641, 30));
+								}
 
-								this.stModeBar[i].BarTexture.vc拡大縮小倍率.Y = BarAnime / 25.7f + BarAnime1 / 25.7f;
-								this.stModeBar[i].BarTexture.t2D拡大率考慮中央基準描画(TJAPlayer3.app.Device, 640, 360, new Rectangle(0, 27, 641, 45));
-
-								TJAPlayer3.Tx.ModeSelect_Bar[this.nbModes].vc拡大縮小倍率.Y = 1.0f;
-								TJAPlayer3.Tx.ModeSelect_Bar[this.nbModes].t2D描画(TJAPlayer3.app.Device, 320, 306, new Rectangle(0, 0, 641, 27));
-								TJAPlayer3.Tx.ModeSelect_Bar[this.nbModes].t2D描画(TJAPlayer3.app.Device, 320, 334 + (BarAnime + BarAnime1) / 0.95238f, new Rectangle(0, 71, 641, 35));
-
-								TJAPlayer3.Tx.ModeSelect_Bar[this.nbModes].vc拡大縮小倍率.Y = (BarAnime + BarAnime1) / 0.95238f;
-								TJAPlayer3.Tx.ModeSelect_Bar[this.nbModes].t2D拡大率考慮上中央基準描画(TJAPlayer3.app.Device, 640, 333, new Rectangle(0, 27, 641, 1));
 
 								float anime = 0;
 								float BarAnimeCount = this.ctBarMove.n現在の値 - 150;
@@ -641,24 +711,23 @@ namespace TJAPlayer3
 								else
 									anime = 150 - (BarAnimeCount - 45) * 0.61764705f;
 
-								TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].Opacity = (int)(BarAnimeCount * 2.55f) + (int)(BarAnime * 2.5f);
-								//130
-								TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].t2D中心基準描画(TJAPlayer3.app.Device, 640 - TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].szテクスチャサイズ.Width / 4 + 114 - anime, 360,
-									new Rectangle(0, 0, TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].szテクスチャサイズ.Width / 2, TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].szテクスチャサイズ.Height));
+								if (_chara != null)
+								{
+									_chara.Opacity = (int)(BarAnimeCount * 2.55f) + (int)(BarAnime * 2.5f);
+									_chara.t2D中心基準描画(TJAPlayer3.app.Device, 640 - _chara.szテクスチャサイズ.Width / 4 + 114 - anime, 360,
+										new Rectangle(0, 0, _chara.szテクスチャサイズ.Width / 2, _chara.szテクスチャサイズ.Height));
+									_chara.t2D中心基準描画(TJAPlayer3.app.Device, 640 + _chara.szテクスチャサイズ.Width / 4 - 114 + anime, 360,
+										new Rectangle(_chara.szテクスチャサイズ.Width / 2, 0, _chara.szテクスチャサイズ.Width / 2, _chara.szテクスチャサイズ.Height));
+								}
 
-								TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].t2D中心基準描画(TJAPlayer3.app.Device, 640 + TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].szテクスチャサイズ.Width / 4 - 114 + anime, 360,
-									new Rectangle(TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].szテクスチャサイズ.Width / 2, 0, TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].szテクスチャサイズ.Width / 2, TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].szテクスチャサイズ.Height));
+								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(_menu.ttkTitle)?.t2D中心基準描画(TJAPlayer3.app.Device, 631, 379 - BarAnimeCount / 1.5f);
 
-								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(idxToTex(i))?.t2D中心基準描画(TJAPlayer3.app.Device, 631, 379 - BarAnimeCount / 1.5f);
-
-								if (i < this.ttkBoxText.Length)
-                                {
-									CTexture currentText = TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(this.ttkBoxText[i]);
-
+								CTexture currentText = TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(_menu.ttkBoxText);
+								if (currentText != null)
+								{
 									currentText.Opacity = (int)(BarAnimeCount * 2.55f);
 									currentText?.t2D中心基準描画(TJAPlayer3.app.Device, 640, 331 + 132 / 2);
 								}
-								
 
 							}
 							else
@@ -671,7 +740,8 @@ namespace TJAPlayer3
 
 								#region [Position precalculation]
 
-								int CurrentPos = this.stModeBar[i].n現在存在している行;
+								//int CurrentPos = this.stModeBar[i].n現在存在している行;
+								int CurrentPos = usedMenusPos[i];
 								int Selected;
 
 								if (this.bDownPushed)
@@ -684,106 +754,81 @@ namespace TJAPlayer3
 
 								#endregion
 
-								#region [Disable visualy 1p specific buttons if 2p]
-
-								if (restricted1p[i] == true && TJAPlayer3.ConfigIni.nPlayerCount > 1)
-								{
-									TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].color4 = C変換.ColorToColor4(Color.DarkGray);
-									TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(idxToTex(i)).color4 = C変換.ColorToColor4(Color.DarkGray);
-									this.stModeBar[i].BarTexture.color4 = C変換.ColorToColor4(Color.DarkGray);
-								}
-								else
-								{
-									TJAPlayer3.Tx.ModeSelect_Bar_Chara[i].color4 = C変換.ColorToColor4(Color.White);
-									TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(idxToTex(i)).color4 = C変換.ColorToColor4(Color.White);
-									this.stModeBar[i].BarTexture.color4 = C変換.ColorToColor4(Color.White);
-								}
-
-								#endregion
-
 								BarMoveX = ctBarMove.n現在の値 <= 100 ? (int)(pos.X - posSelect.X) - (int)(ctBarMove.n現在の値 / 100f * (pos.X - posSelect.X)) : 0;
 								BarMoveY = ctBarMove.n現在の値 <= 100 ? (int)(pos.Y - posSelect.Y) - (int)(ctBarMove.n現在の値 / 100f * (pos.Y - posSelect.Y)) : 0;
 
-								this.stModeBar[i].BarTexture.vc拡大縮小倍率.Y = 1.0f;
-								TJAPlayer3.Tx.ModeSelect_Bar[this.nbModes].vc拡大縮小倍率.Y = 1.0f;
-								this.stModeBar[i].BarTexture.t2D描画(TJAPlayer3.app.Device, pos.X + BarAnimeX - BarMoveX, pos.Y + BarAnimeY - BarMoveY);
-								TJAPlayer3.Tx.ModeSelect_Bar[this.nbModes].t2D描画(TJAPlayer3.app.Device, pos.X + BarAnimeX - BarMoveX, pos.Y + BarAnimeY - BarMoveY);
 
-								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(idxToTex(i))?.t2D中心基準描画(TJAPlayer3.app.Device, pos.X + BarAnimeX - BarMoveX + 311, pos.Y + BarAnimeY - BarMoveY + 72);
+								if (_bar != null)
+								{
+									_bar.vc拡大縮小倍率.Y = 1.0f;
+									_bar.t2D描画(TJAPlayer3.app.Device, pos.X + BarAnimeX - BarMoveX, pos.Y + BarAnimeY - BarMoveY);
+								}
+
+								if (TJAPlayer3.Tx.ModeSelect_Bar[CMainMenuTab.__MenuCount] != null)
+								{
+									CTexture _overlap = TJAPlayer3.Tx.ModeSelect_Bar[CMainMenuTab.__MenuCount];
+
+									_overlap.vc拡大縮小倍率.Y = 1.0f;
+									_overlap.t2D描画(TJAPlayer3.app.Device, pos.X + BarAnimeX - BarMoveX, pos.Y + BarAnimeY - BarMoveY);
+								}
+
+
+
+								TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(_menu.ttkTitle)?.t2D中心基準描画(TJAPlayer3.app.Device, pos.X + BarAnimeX - BarMoveX + 311, pos.Y + BarAnimeY - BarMoveY + 72);
 							}
-                        }
+						}
 					}
 
-					TJAPlayer3.NamePlate.tNamePlateDraw(TJAPlayer3.Skin.SongSelect_NamePlate_X[0], TJAPlayer3.Skin.SongSelect_NamePlate_Y[0], 0, false, 255);
+					for (int player = 0; player < TJAPlayer3.ConfigIni.nPlayerCount; player++)
+					{
+						TJAPlayer3.NamePlate.tNamePlateDraw(TJAPlayer3.Skin.SongSelect_NamePlate_X[player], TJAPlayer3.Skin.SongSelect_NamePlate_Y[player], player, false, 255);
+					}
 				}
 
-                #endregion
+				#endregion
 
-                #region[ バージョン表示 ]
+				#region[ バージョン表示 ]
 
 #if DEBUG
 
-                //string strVersion = "KTT:J:A:I:2017072200";
-                string strCreator = "https://github.com/AioiLight/TJAPlayer3";
-                AssemblyName asmApp = Assembly.GetExecutingAssembly().GetName();
-                TJAPlayer3.act文字コンソール.tPrint(4, 44, C文字コンソール.Eフォント種別.白, "DEBUG BUILD");
-				TJAPlayer3.act文字コンソール.tPrint(4, 4, C文字コンソール.Eフォント種別.白, asmApp.Name + " Ver." + TJAPlayer3.VERSION + " (" + strCreator + ")" );
-                TJAPlayer3.act文字コンソール.tPrint(4, 24, C文字コンソール.Eフォント種別.白, "Skin:" + TJAPlayer3.Skin.Skin_Name + " Ver." + TJAPlayer3.Skin.Skin_Version + " (" + TJAPlayer3.Skin.Skin_Creator + ")");
-                //CDTXMania.act文字コンソール.tPrint(4, 24, C文字コンソール.Eフォント種別.白, strSubTitle);
-                TJAPlayer3.act文字コンソール.tPrint(4, (720 - 24), C文字コンソール.Eフォント種別.白, "TJAPlayer3 forked TJAPlayer2 forPC(kairera0467)");
+				//string strVersion = "KTT:J:A:I:2017072200";
+				string strCreator = "https://github.com/AioiLight/TJAPlayer3";
+				AssemblyName asmApp = Assembly.GetExecutingAssembly().GetName();
+				TJAPlayer3.act文字コンソール.tPrint(4, 44, C文字コンソール.Eフォント種別.白, "DEBUG BUILD");
+				TJAPlayer3.act文字コンソール.tPrint(4, 4, C文字コンソール.Eフォント種別.白, asmApp.Name + " Ver." + TJAPlayer3.VERSION + " (" + strCreator + ")");
+				TJAPlayer3.act文字コンソール.tPrint(4, 24, C文字コンソール.Eフォント種別.白, "Skin:" + TJAPlayer3.Skin.Skin_Name + " Ver." + TJAPlayer3.Skin.Skin_Version + " (" + TJAPlayer3.Skin.Skin_Creator + ")");
+				//CDTXMania.act文字コンソール.tPrint(4, 24, C文字コンソール.Eフォント種別.白, strSubTitle);
+				TJAPlayer3.act文字コンソール.tPrint(4, (720 - 24), C文字コンソール.Eフォント種別.白, "TJAPlayer3 forked TJAPlayer2 forPC(kairera0467)");
 
 #endif
-                #endregion
-				
+				#endregion
+
 				CStage.Eフェーズ eフェーズid = base.eフェーズID;
-				switch( eフェーズid )
+				switch (eフェーズid)
 				{
 					case CStage.Eフェーズ.共通_フェードイン:
-						if( this.actFI.On進行描画() != 0 )
+						if (this.actFI.On進行描画() != 0)
 						{
 							base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
 						}
 						break;
 
 					case CStage.Eフェーズ.共通_フェードアウト:
-						if( this.actFO.On進行描画() == 0 )
+						if (this.actFO.On進行描画() == 0)
 						{
 							TJAPlayer3.Skin.bgmタイトル.t停止する();
 							TJAPlayer3.Skin.bgmタイトルイン.t停止する();
 							break;
 						}
 						base.eフェーズID = CStage.Eフェーズ.共通_終了状態;
-						
-						switch ( this.n現在の選択行モード選択)
-						{
-							case (int)E戻り値.GAMESTART - 1:
-								return (int)E戻り値.GAMESTART;
 
-							case (int)E戻り値.DANGAMESTART - 1:
-								return (int)E戻り値.DANGAMESTART;
 
-							case (int)E戻り値.TAIKOTOWERSSTART - 1:
-								return (int)E戻り値.TAIKOTOWERSSTART;
+						// Select Menu here
 
-							case (int)E戻り値.SHOPSTART - 1:
-								return (int)E戻り値.SHOPSTART;
-
-							case (int)E戻り値.BOUKENSTART - 1:
-								return (int)E戻り値.BOUKENSTART;
-
-							case (int)E戻り値.HEYA - 1:
-								return (int)E戻り値.HEYA;
-
-							case (int) E戻り値.CONFIG - 1:
-								return (int) E戻り値.CONFIG;
-
-							case (int)E戻り値.EXIT - 1:
-								return (int) E戻り値.EXIT;
-						}
-						break;
+						return ((int)CMainMenuTab.__Menus[usedMenus[this.n現在の選択行モード選択]].rp);
 
 					case CStage.Eフェーズ.タイトル_起動画面からのフェードイン:
-						if( this.actFIfromSetup.On進行描画() != 0 )
+						if (this.actFIfromSetup.On進行描画() != 0)
 						{
 							base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
 						}
@@ -802,7 +847,13 @@ namespace TJAPlayer3
 			BOUKENSTART,
 			HEYA,
 			CONFIG,
-			EXIT
+			EXIT,
+			ONLINELOUNGE,
+			ENCYCLOPEDIA,
+			AIBATTLEMODE,
+			PLAYERSTATS,
+			CHARTEDITOR,
+			TOOLBOX,
 		}
 
 
@@ -813,15 +864,15 @@ namespace TJAPlayer3
 
 		// Directly propose the different game options if the save file is already loaded, go back to save file select by pressing "Escape"
 		private void SkipSaveFileStep()
-        {
+		{
 			if (bSaveFileLoaded == true)
-            {
+			{
 				bモード選択 = true;
 				// bプレイヤーエントリー = true;
 				bバナパス読み込み = true;
 				bプレイヤーエントリー決定 = true;
 				bどんちゃんカウンター初期化 = true;
-				
+
 				this.ctバナパス読み込み待機.t開始(0, 600, 1, TJAPlayer3.Timer);
 				this.ctバナパス読み込み待機.n現在の値 = (int)this.ctバナパス読み込み待機.n終了値;
 				ctエントリーバー決定点滅.t開始(0, 1055, 1, TJAPlayer3.Timer);
@@ -838,24 +889,29 @@ namespace TJAPlayer3
 				TJAPlayer3.Skin.SoundBanapas.bPlayed = true;
 				TJAPlayer3.Skin.soundsanka.bPlayed = true;
 			}
-        }
+		}
 
 		// Restore the title screen to the "Taiko hit start" screen
 		private void UnloadSaveFile()
-        {
+		{
 			this.ctバナパス読み込み待機 = new CCounter();
 			this.ctコインイン待機 = new CCounter(0, 2000, 1, TJAPlayer3.Timer);
 			this.ctバナパス読み込み成功 = new CCounter();
 			this.ctバナパス読み込み失敗 = new CCounter();
 			this.ctエントリーバー点滅 = new CCounter(0, 510, 2, TJAPlayer3.Timer);
 			this.ctエントリーバー決定点滅 = new CCounter();
-			this.ctどんちゃんエントリーループ = new CCounter();
+
+			//this.ctどんちゃんエントリーループ = new CCounter();
+			CMenuCharacter.tMenuResetTimer(CMenuCharacter.ECharacterAnimation.ENTRY);
 			this.ctどんちゃんイン = new CCounter();
-			this.ctどんちゃんループ = new CCounter(0, TJAPlayer3.Tx.Entry_Donchan_Normal.Length - 1, 1000 / 30, TJAPlayer3.Timer);
+			//this.ctどんちゃんループ = new CCounter(0, TJAPlayer3.Tx.Entry_Donchan_Normal.Length - 1, 1000 / 30, TJAPlayer3.Timer);
+			CMenuCharacter.tMenuResetTimer(CMenuCharacter.ECharacterAnimation.ENTRY_NORMAL);
+
+
 			this.ctBarAnimeIn = new CCounter();
 			this.ctBarMove = new CCounter();
 			this.ctBarMove.n現在の値 = 250;
-			
+
 			this.bバナパス読み込み = false;
 			this.bバナパス読み込み失敗 = false;
 			this.bプレイヤーエントリー = false;
@@ -879,9 +935,9 @@ namespace TJAPlayer3
 		private CCounter ctエントリーバー点滅;
 		private CCounter ctエントリーバー決定点滅;
 
-		private CCounter ctどんちゃんエントリーループ;
+		//private CCounter ctどんちゃんエントリーループ;
 		private CCounter ctどんちゃんイン;
-		private CCounter ctどんちゃんループ;
+		//private CCounter ctどんちゃんループ;
 
 		private CCounter ctBarAnimeIn;
 		private CCounter ctBarMove;
@@ -893,17 +949,9 @@ namespace TJAPlayer3
 		private CPrivateFastFont pfMenuTitle;
 		private CPrivateFastFont pfBoxText;
 
-		private TitleTextureKey ttkEnsou;
-		private TitleTextureKey ttkDan;
-		private TitleTextureKey ttkTower;
-		private TitleTextureKey ttkShop;
-		private TitleTextureKey ttkBouken;
-		private TitleTextureKey ttkSettings;
-		private TitleTextureKey ttkExit;
-
-		private TitleTextureKey ttkHeya;
-
-		private TitleTextureKey[] ttkBoxText;
+		private int[] usedMenus;
+		private int[] usedMenusPos;
+		private int usedMenusCount;
 
 		private bool bバナパス読み込み;
 		private bool bバナパス読み込み失敗;
@@ -917,19 +965,9 @@ namespace TJAPlayer3
 
 		private Point[] ptプレイヤーエントリーバー座標 =
 			{ new Point(337, 488), new Point( 529, 487), new Point(743, 486) };
-		
+
 		private Point[] ptモード選択バー座標 =
 			{ new Point(290, 107), new Point(319, 306), new Point(356, 513) };
-
-		private int nbModes = 8;
-		private STModeBar[] stModeBar = new STModeBar[8];
-		private bool[] restricted1p = { false, true, true, false, true, false, false, false };
-
-		private struct STModeBar
-		{
-			public int n現在存在している行;
-			public CTexture BarTexture;
-		}
 
 		private Point getFixedPositionForBar(int CurrentPos)
 		{
@@ -956,30 +994,6 @@ namespace TJAPlayer3
 
 			return new Point(posX, posY);
 		}
-
-		private TitleTextureKey idxToTex(int idx)
-        {
-			switch (idx)
-            {
-				case 7:
-					return this.ttkExit;
-				case 6:
-					return this.ttkSettings;
-				case 5:
-					return this.ttkHeya;
-				case 4:
-					return this.ttkBouken;
-				case 3:
-					return this.ttkShop;
-				case 2:
-					return this.ttkTower;
-				case 1:
-					return this.ttkDan;
-				case 0:
-				default:
-					return this.ttkEnsou;
-            }
-        }
 
 		private bool b音声再生;
 		private CActFIFOBlack actFI;

@@ -197,19 +197,19 @@ namespace TJAPlayer3
 
             if (this.ctBarAnimeIn.b終了値に達した)
             {
-                if (!bSelect[0] && !bOption[0])
+                if (!bSelect[0] && !isOnOption())
                 {
-                    if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RBlue) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.RightArrow))
+                    if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RightChange) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.RightArrow))
                     {
                         TJAPlayer3.Skin.sound変更音.t再生する();
                         this.t次に移動(0);
                     }
-                    else if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LBlue) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.LeftArrow))
+                    else if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LeftChange) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.LeftArrow))
                     {
                         TJAPlayer3.Skin.sound変更音.t再生する();
                         this.t前に移動(0);
                     }
-                    if (TJAPlayer3.Pad.b押されたDGB(Eパッド.Decide) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LRed) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RRed) ||
+                    if (TJAPlayer3.Pad.b押されたDGB(Eパッド.Decide) ||
                              (TJAPlayer3.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Return)))
                     {
                         if (n現在の選択行[0] == 0)
@@ -227,7 +227,9 @@ namespace TJAPlayer3
                         {
                             if (TJAPlayer3.stage選曲.r現在選択中のスコア.譜面情報.nレベル[n現在の選択行[0] - 2] > 0)
                             {
-                                TJAPlayer3.stage選曲.ctDonchan_Jump[0].t開始(0, TJAPlayer3.Tx.SongSelect_Donchan_Jump.Length - 1, 1000 / 45, TJAPlayer3.Timer);
+                                //TJAPlayer3.stage選曲.ctDonchan_Jump[0].t開始(0, TJAPlayer3.Tx.SongSelect_Donchan_Jump.Length - 1, 1000 / 45, TJAPlayer3.Timer);
+                                CMenuCharacter.tMenuResetTimer(0, CMenuCharacter.ECharacterAnimation.START);
+
                                 this.bSelect[0] = true;
                                 TJAPlayer3.Skin.sound曲決定音.t再生する();
 
@@ -246,9 +248,15 @@ namespace TJAPlayer3
                             }
                         }
                     }
+                    if (TJAPlayer3.Pad.b押されたDGB(Eパッド.Cancel) || TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Escape))
+                    {
+                        TJAPlayer3.Skin.sound決定音.t再生する();
+                        TJAPlayer3.stage選曲.act曲リスト.ctBarOpen.t開始(100, 260, 2, TJAPlayer3.Timer);
+                        this.bIsDifficltSelect = false;
+                    }
                 }
 
-                if (!bSelect[1] && !bOption[1])
+                if (!bSelect[1] && !isOnOption() && TJAPlayer3.ConfigIni.nPlayerCount > 1)
                 {
                     if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RBlue2P))
                     {
@@ -267,6 +275,8 @@ namespace TJAPlayer3
                             TJAPlayer3.Skin.sound決定音.t再生する();
                             TJAPlayer3.stage選曲.act曲リスト.ctBarOpen.t開始(100, 260, 2, TJAPlayer3.Timer);
                             this.bIsDifficltSelect = false;
+                            CMenuCharacter.tDisableCounter(CMenuCharacter.ECharacterAnimation.START);
+
                         }
                         else if (n現在の選択行[1] == 1)
                         {
@@ -277,7 +287,9 @@ namespace TJAPlayer3
                         {
                             if (TJAPlayer3.stage選曲.r現在選択中のスコア.譜面情報.nレベル[n現在の選択行[1] - 2] > 0)
                             {
-                                TJAPlayer3.stage選曲.ctDonchan_Jump[1].t開始(0, TJAPlayer3.Tx.SongSelect_Donchan_Jump.Length - 1, 1000 / 45, TJAPlayer3.Timer);
+                                //TJAPlayer3.stage選曲.ctDonchan_Jump[1].t開始(0, TJAPlayer3.Tx.SongSelect_Donchan_Jump.Length - 1, 1000 / 45, TJAPlayer3.Timer);
+                                CMenuCharacter.tMenuResetTimer(1, CMenuCharacter.ECharacterAnimation.START);
+
                                 this.bSelect[1] = true;
                                 TJAPlayer3.Skin.sound曲決定音.t再生する();
 
@@ -470,6 +482,11 @@ namespace TJAPlayer3
                 }
                 x += 11;
             }
+        }
+
+        private bool isOnOption()
+        {
+            return bOption[1] || bOption[0];
         }
 
         public int nStrジャンルtoNum(string strジャンル)

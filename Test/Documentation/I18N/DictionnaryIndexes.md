@@ -161,9 +161,16 @@
 10055 : "System key input configuration" option title
 10056 : "Hide Dan/Tower" option title
 10057 : "Hide Dan/Tower" description
+10060 : "Konga clap key settings" option title
+10061 : "Konga clap key settings" description
+10062 : "Konga clap key settings for 2P" option title
+10063 : "Konga clap key settings for 2P" description
 10084 : "Shin-uchi toggle" option title
+10085 : "System options" menu title
+10086 : "Gameplay options" menu title
+10087 : "Exit" menu title
 10090 : "System" description
-10091 : "Drums" description
+10091 : "Gameplay options" description
 10092 : "Exit" description
 
 # Main Menu text (001XX)
@@ -176,6 +183,12 @@
 105 : Heya main menu button 
 106 : Settings main menu button 
 107 : Quit main menu button
+108 : Online lounge main menu button 
+109 : Open encyclopedia main menu button
+110 : AI Battle main menu button
+111 : Player stats main menu button
+112 : Chart editor main menu button
+113 : Open Toolbox main menu button
 
 150 : Ensou main menu box text
 151 : Dan main menu box text
@@ -185,6 +198,12 @@
 155 : Heya main menu box text
 156 : Settings main menu box text
 157 : Quit main menu box text
+158 : Online lounge main menu box text
+159 : Open encyclopedia main menu box text
+160 : AI Battle main menu box text
+161 : Player stats main menu box text
+162 : Chart editor main menu box text
+163 : Open Toolbox main menu box text
 
 # Special items (002XX)
 
@@ -204,6 +223,45 @@
 306 : Coins
 307 : Total (coins)
 
+# Online Lounge submenus (0040X)
+
+400 : Return to main menu button
+401 : Return button
+402 : Select CDN menu button
+403 : Select a CDN
+404 : Download songs button
+405 : Download characters button
+406 : Download puchicharas button
+407 : Online multiplayer button
+
+# Mod specific (005XX)
+
+500 : "Timing" mod name
+501 : "Loose" timing mod option
+502 : "Lenient" timing mod option
+503 : "Normal" timing mod option
+504 : "Strict" timing mod option
+505 : "Rigorous" timing mod option
+510 : "Score Multiplier : " (For modifiers)
+511 : "Coins Multiplier : " (For modifiers)
+512 : "Game Type" mod name
+513 : "Taiko" game type mod option
+514 : "Konga" game type mod option
+515 : "Fun mods" mod name
+516 : "Avalanche" fun mod option
+517 : "Minesweeper" fun mod option
+
+# In-game pause menu (0090X)
+
+900 : Continue
+901 : Restart
+902 : Exit
+
+# AI nameplate informations (0091X)
+
+910 : AI
+911 : Deus-ex-machina
+
 # Tower text (0100X)
 
 1000 : Reached floor (Tower)
@@ -222,6 +280,8 @@
 1016 : Notes hit count
 1017 : Combo 
 1018 : Accuracy
+1019 : ADLIB count
+1020 : Bombs hit
 
 # Heya buttons (0103X)
 
@@ -231,22 +291,16 @@
 1033 : Dan title
 1034 : Plate title
 
-# Feature specific errors (9XXXX)
+# Difficulties (0104X)
 
-90000 : "Invalid condition" error message
-90001 : "You can buy it at the Shop" condition/failed condition message (cs)
-90002 : "Coin price : " condition message (ch)
-90003 : "Item bought !" succeed condition message (ch)
-90004 : "Not enough coins !" failed condition message (ch)
-90005 : "The following condition : " missing arguments error message
+1040 : Easy
+1041 : Normal
+1042 : Hard
+1043 : Extreme (Oni)
+1044 : Extra (Ura)
+1045 : Extreme / Extra
 
-# In-game pause menu (90X)
-
-900 : Continue
-901 : Restart
-902 : Exit
-
-# Song selection page options (900X)
+# Song selection page options (090XX)
 
 9000 : Off
 9001 : On
@@ -263,4 +317,24 @@
 9013 : Auto
 9014 : Voice
 9015 : Sound Type
+9016 : Stealth
+9017 : Safe
+9018 : Just
+
+# Song selection context boxes (091XX)
+
+9100 : Search (Difficulty)
+9101 : Difficulty
+9102 : Level
+
+# Feature specific errors (9XXXX)
+
+90000 : "Invalid condition" error message
+90001 : "You can buy it at the Shop" condition/failed condition message (cs)
+90002 : "Coin price : " condition message (ch)
+90003 : "Item bought !" succeed condition message (ch)
+90004 : "Not enough coins !" failed condition message (ch)
+90005 : "The following condition : " missing arguments error message
+
+
 ```

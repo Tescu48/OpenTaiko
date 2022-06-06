@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using TJAPlayer3.C曲リストノードComparers;
 using FDK;
@@ -93,8 +94,68 @@ namespace TJAPlayer3
 
 		// メソッド
 
-		#region [ 曲を検索してリストを作成する ]
+		#region [ Fetch song list ]
 		//-----------------
+
+		public void UpdateDownloadBox()
+		{
+
+			C曲リストノード downloadBox = null;
+			for (int i = 0; i < TJAPlayer3.Songs管理.list曲ルート.Count; i++)
+			{
+				if (TJAPlayer3.Songs管理.list曲ルート[i].strジャンル == "Download")
+				{
+					downloadBox = TJAPlayer3.Songs管理.list曲ルート[i];
+					if (downloadBox.r親ノード != null) downloadBox = downloadBox.r親ノード;
+				}
+
+			}
+
+			if (downloadBox != null && downloadBox.list子リスト != null)
+            {
+
+				var flatten = TJAPlayer3.stage選曲.act曲リスト.flattenList(downloadBox.list子リスト);
+				
+				// Works because flattenList creates a new List
+				for (int i = 0; i < downloadBox.list子リスト.Count; i++)
+				{
+					CSongDict.tRemoveSongNode(downloadBox.list子リスト[i].uniqueId);
+					downloadBox.list子リスト.Remove(downloadBox.list子リスト[i]);
+					i--;
+				}
+				
+
+				var path = downloadBox.arスコア[0].ファイル情報.フォルダの絶対パス;
+
+				if (flatten.Count > 0)
+				{
+					int index = list曲ルート.IndexOf(flatten[0]);
+
+					/*
+					if (!list曲ルート.Contains(downloadBox))
+					{
+						for (int i = 0; i < flatten.Count; i++)
+						{
+							this.list曲ルート.Remove(flatten[i]);
+						}
+						list曲ルート.Insert(index, downloadBox);
+					}
+					*/
+
+					if (!list曲ルート.Contains(downloadBox))
+					{
+						this.list曲ルート = this.list曲ルート.Except(flatten).ToList();
+						list曲ルート.Insert(index, downloadBox);
+					}
+
+					t曲を検索してリストを作成する(path, true, downloadBox.list子リスト, downloadBox);
+					this.t曲リストへ後処理を適用する(downloadBox.list子リスト, $"/{downloadBox.strタイトル}/");
+					tSongsDBになかった曲をファイルから読み込んで反映する(downloadBox.list子リスト);
+					downloadBox.list子リスト.Insert(0, CSongDict.tGenerateBackButton(downloadBox, $"/{downloadBox.strタイトル}/"));
+				}
+			}
+			
+		}
 		public void t曲を検索してリストを作成する( string str基点フォルダ, bool b子BOXへ再帰する )
 		{
 			this.t曲を検索してリストを作成する( str基点フォルダ, b子BOXへ再帰する, this.list曲ルート, null );
@@ -388,7 +449,7 @@ namespace TJAPlayer3
                                 c曲リストノード.nLevel = dtx.LEVELtaiko;
 								c曲リストノード.uniqueId = dtx.uniqueID;
 
-								CSongDict.tAddSongNode(c曲リストノード.uniqueId.data.id, c曲リストノード);
+								CSongDict.tAddSongNode(c曲リストノード.uniqueId, c曲リストノード);
 
 								c曲リストノード.arスコア[ n ] = new Cスコア();
                                 c曲リストノード.arスコア[ n ].ファイル情報.ファイルの絶対パス = str基点フォルダ + fileinfo.Name;
@@ -1072,7 +1133,7 @@ namespace TJAPlayer3
 		private void t曲リストへ後処理を適用する( List<C曲リストノード> ノードリスト, string parentName = "/", bool isGlobal = true )
 		{
 			
-			if (isGlobal)
+			if (isGlobal && ノードリスト.Count > 0)
             {
 				var randomNode = CSongDict.tGenerateRandomButton(ノードリスト[0].r親ノード, parentName);
 				ノードリスト.Add(randomNode);

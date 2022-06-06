@@ -21,7 +21,7 @@ namespace TJAPlayer3
             base.list子Activities.Add(this.actFOtoNowLoading = new CActFIFOStart());
             base.list子Activities.Add(this.段位挑戦選択画面 = new CActSelect段位挑戦選択画面());
             base.list子Activities.Add(this.actFOtoTitle = new CActFIFOBlack());
-
+            base.list子Activities.Add(this.actPlayOption = new CActPlayOption());
             base.list子Activities.Add(this.PuchiChara = new PuchiChara());
         }
 
@@ -37,7 +37,10 @@ namespace TJAPlayer3
 
             ct待機 = new CCounter();
             ctDonchan_In = new CCounter();
-            ctDonchan_Normal = new CCounter(0, TJAPlayer3.Tx.SongSelect_Donchan_Normal.Length - 1, 1000 / 45, TJAPlayer3.Timer);
+
+            // ctDonchan_Normal = new CCounter(0, TJAPlayer3.Tx.SongSelect_Donchan_Normal.Length - 1, 1000 / 45, TJAPlayer3.Timer);
+            CMenuCharacter.tMenuResetTimer(CMenuCharacter.ECharacterAnimation.NORMAL); 
+
 
             bInSongPlayed = false;
             
@@ -63,7 +66,7 @@ namespace TJAPlayer3
 
         public override int On進行描画()
         {
-            ctDonchan_Normal.t進行Loop();
+            // ctDonchan_Normal.t進行Loop();
             ctDonchan_In.t進行();
             ct待機.t進行();
 
@@ -76,7 +79,6 @@ namespace TJAPlayer3
             TJAPlayer3.Tx.Dani_Background.t2D拡大率考慮中央基準描画(TJAPlayer3.app.Device, 640, 360);
 
             this.段位リスト.On進行描画();
-
 
             if (stamp < 6000)
             {
@@ -141,26 +143,26 @@ namespace TJAPlayer3
                 }
 
                 TJAPlayer3.NamePlate.tNamePlateDraw(TJAPlayer3.Skin.SongSelect_NamePlate_X[0], TJAPlayer3.Skin.SongSelect_NamePlate_Y[0] + 5, 0);
+                ModIcons.tDisplayModsMenu(40, 672, 0);
 
                 #region [ キー関連 ]
 
                 if (!this.段位リスト.bスクロール中 && !b選択した && !bDifficultyIn)
                 {
                     if (TJAPlayer3.Input管理.Keyboard.bキーが押されている((int)SlimDXKeys.Key.RightArrow) ||
-                        TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RBlue))
+                        TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RightChange))
                     {
                         this.段位リスト.t右に移動();
                     }
 
                     if (TJAPlayer3.Input管理.Keyboard.bキーが押されている((int)SlimDXKeys.Key.LeftArrow) ||
-                    TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LBlue))
+                    TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LeftChange))
                     {
                         this.段位リスト.t左に移動();
                     }
 
                     if (TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Return) ||
-                        TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LRed) ||
-                        TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RRed))
+                        TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.Decide))
                     {
                         //this.t段位を選択する();
                         TJAPlayer3.Skin.soundDanSongSelectCheck.t再生する();
@@ -168,7 +170,8 @@ namespace TJAPlayer3
                         this.段位挑戦選択画面.ctBarIn.t開始(0, 255, 1, TJAPlayer3.Timer);
                     }
 
-                    if(TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Escape))
+                    if(TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDXKeys.Key.Escape) ||
+                        TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.Cancel))
                     {
                         TJAPlayer3.Skin.soundDanSelectBGM.t停止する();
                         TJAPlayer3.Skin.sound取消音.t再生する();
@@ -190,8 +193,10 @@ namespace TJAPlayer3
                     DonchanX = (float)Math.Sin(ctDonchan_In.n現在の値 / 2 * (Math.PI / 180)) * 200f;
                     DonchanY = ((float)Math.Sin((90 + (ctDonchan_In.n現在の値 / 2)) * (Math.PI / 180)) * 150f);
 
-                    TJAPlayer3.Tx.SongSelect_Donchan_Normal[ctDonchan_Normal.n現在の値].Opacity = ctDonchan_In.n現在の値 * 2;
-                    TJAPlayer3.Tx.SongSelect_Donchan_Normal[ctDonchan_Normal.n現在の値].t2D描画(TJAPlayer3.app.Device, -200 + DonchanX, 336 - DonchanY);
+                    // TJAPlayer3.Tx.SongSelect_Donchan_Normal[ctDonchan_Normal.n現在の値].Opacity = ctDonchan_In.n現在の値 * 2;
+                    // TJAPlayer3.Tx.SongSelect_Donchan_Normal[ctDonchan_Normal.n現在の値].t2D描画(TJAPlayer3.app.Device, -200 + DonchanX, 336 - DonchanY);
+
+                    CMenuCharacter.tMenuDisplayCharacter(0, (int)(-200 + DonchanX), (int)(336 - DonchanY), CMenuCharacter.ECharacterAnimation.NORMAL);
 
                     #region [PuchiChara]
 
@@ -205,7 +210,9 @@ namespace TJAPlayer3
                 this.段位挑戦選択画面.On進行描画();
             }
 
-            if(ct待機.n現在の値 >= 3000)
+            if (段位挑戦選択画面.bOption) actPlayOption.On進行描画(0);
+
+            if (ct待機.n現在の値 >= 3000)
             {
                 TJAPlayer3.stage段位選択.t段位を選択する();
                 ct待機.n現在の値 = 0;
@@ -265,7 +272,7 @@ namespace TJAPlayer3
         public bool bInSongPlayed;
 
         private CCounter ctDonchan_In;
-        private CCounter ctDonchan_Normal;
+        // private CCounter ctDonchan_Normal;
 
         private PuchiChara PuchiChara;
 
@@ -275,5 +282,6 @@ namespace TJAPlayer3
         public CActFIFOBlack actFOtoTitle;
         public CActSelect段位リスト 段位リスト;
         public CActSelect段位挑戦選択画面 段位挑戦選択画面;
+        public CActPlayOption actPlayOption;
     }
 }

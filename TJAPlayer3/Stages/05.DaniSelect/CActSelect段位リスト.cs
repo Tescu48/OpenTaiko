@@ -62,7 +62,7 @@ namespace TJAPlayer3
             else
                 this.pfExamFont = new CPrivateFastFont(new FontFamily("MS UI Gothic"), 13);
 
-            this.ttkExams = new TitleTextureKey[(int)Exam.Type.Accuracy + 1];
+            this.ttkExams = new TitleTextureKey[(int)Exam.Type.Total];
             for (int i = 0; i < this.ttkExams.Length; i++)
             {
                 this.ttkExams[i] = new TitleTextureKey(CLangManager.LangInstance.GetString(1010 + i), this.pfExamFont, Color.White, Color.SaddleBrown, 1000);
@@ -394,7 +394,8 @@ namespace TJAPlayer3
             if (stバー情報[currentSong].List_DanSongs[0].Dan_C[0] != null)
                 tSoulDraw(scroll + 370 + Anime, 462, stバー情報[currentSong].List_DanSongs[0].Dan_C[0].Value[0].ToString());
 
-            TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(this.ttkExams[0]).t2D下中央基準描画(TJAPlayer3.app.Device, (int)(scroll + 396 + Anime), 452);
+            //TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(this.ttkExams[0]).t2D下中央基準描画(TJAPlayer3.app.Device, (int)(scroll + 396 + Anime), 452);
+            TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(this.ttkExams[0]).t2D拡大率考慮中央基準描画(TJAPlayer3.app.Device, (int)(scroll + 396 + Anime), 429);
 
             #endregion
 
@@ -511,7 +512,9 @@ namespace TJAPlayer3
                     CTexture tmpTex = TJAPlayer3.stage選曲.act曲リスト.ResolveTitleTexture(this.ttkExams[(int)stバー情報[currentSong].List_DanSongs[0].Dan_C[j].GetExamType()]);
 
                     tmpTex.Opacity = opacity;
-                    tmpTex.t2D下中央基準描画(TJAPlayer3.app.Device, (int)(scroll + 614 + Anime), 452 + index * 88);
+                    //tmpTex.t2D下中央基準描画(TJAPlayer3.app.Device, (int)(scroll + 614 + Anime), 452 + index * 88);
+
+                    tmpTex.t2D拡大率考慮中央基準描画(TJAPlayer3.app.Device, (int)(scroll + 614 + Anime), 429 + index * 88);
                 }
 
                 #endregion

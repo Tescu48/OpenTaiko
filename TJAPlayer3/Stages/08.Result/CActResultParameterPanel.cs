@@ -237,17 +237,12 @@ namespace TJAPlayer3
 				ctRotate_Flowers = new CCounter(0, 1500, 1, TJAPlayer3.Timer);
 				ctShine_Plate = new CCounter(0, 1000, 1, TJAPlayer3.Timer);
 
-				ctDonchan_Normal = new CCounter[2];
-				ctDonchan_Clear = new CCounter[2];
-				ctDonchan_Failed = new CCounter[2];
-				ctDonchan_Failed_In = new CCounter[2];
-
 				for (int i = 0; i < 2; i++)
                 {
-					ctDonchan_Normal[i] = new CCounter(0, TJAPlayer3.Tx.Result_Donchan_Normal.Length - 1, 1000 / 60, TJAPlayer3.Timer);
-					ctDonchan_Clear[i] = new CCounter();
-					ctDonchan_Failed[i] = new CCounter();
-					ctDonchan_Failed_In[i] = new CCounter();
+					CResultCharacter.tMenuResetTimer(CResultCharacter.ECharacterResult.NORMAL);
+					CResultCharacter.tDisableCounter(CResultCharacter.ECharacterResult.CLEAR);
+					CResultCharacter.tDisableCounter(CResultCharacter.ECharacterResult.FAILED);
+					CResultCharacter.tDisableCounter(CResultCharacter.ECharacterResult.FAILED_IN);
 				}
 				
 
@@ -296,14 +291,6 @@ namespace TJAPlayer3
 			ctBackgroundAnime.t進行Loop();
 			ctMountain_ClearIn.t進行();
 
-			for (int i = 0; i < 2; i++)
-            {
-				ctDonchan_Clear[i].t進行Loop();
-				ctDonchan_Failed[i].t進行Loop();
-				ctDonchan_Failed_In[i].t進行();
-				ctDonchan_Normal[i].t進行Loop();
-			}
-			
 			ctFlash_Icon.t進行Loop();
 			ctRotate_Flowers.t進行Loop();
 			ctShine_Plate.t進行Loop();
@@ -424,7 +411,7 @@ namespace TJAPlayer3
 						{
 							TJAPlayer3.stage演奏ドラム画面.CChartScore[i].nGreat.ToString(),
 							TJAPlayer3.stage演奏ドラム画面.CChartScore[i].nGood.ToString(),
-							TJAPlayer3.stage演奏ドラム画面.CChartScore[i].nMiss.ToString(),
+							(TJAPlayer3.stage演奏ドラム画面.CChartScore[i].nMiss - TJAPlayer3.stage演奏ドラム画面.CChartScore[i].nMine).ToString(),
 							//TJAPlayer3.stage演奏ドラム画面.CChartScore[i].nRoll.ToString(),
 							TJAPlayer3.stage演奏ドラム画面.GetRoll(i).ToString(),
 							TJAPlayer3.stage演奏ドラム画面.actCombo.n現在のコンボ数.最高値[i].ToString()
@@ -604,15 +591,16 @@ namespace TJAPlayer3
 
 						if (gaugeValues[p] >= 80.0f)
 						{
-							if (!this.ctDonchan_Clear[p].b進行中)
-								this.ctDonchan_Clear[p].t開始(0, TJAPlayer3.Tx.Result_Donchan_Clear.Length - 1, 1000 / 60, TJAPlayer3.Timer);
+							if (!CResultCharacter.tIsCounterProcessing(p, CResultCharacter.ECharacterResult.CLEAR))
+								CResultCharacter.tMenuResetTimer(p, CResultCharacter.ECharacterResult.CLEAR);
 						}
 						else
 						{
-							if (!this.ctDonchan_Failed_In[p].b進行中)
-								this.ctDonchan_Failed_In[p].t開始(0, TJAPlayer3.Tx.Result_Donchan_Failed_In.Length - 1, 1000 / 60, TJAPlayer3.Timer);
-							else if (this.ctDonchan_Failed_In[p].b終了値に達した && !this.ctDonchan_Failed[p].b進行中)
-								this.ctDonchan_Failed[p].t開始(0, TJAPlayer3.Tx.Result_Donchan_Failed.Length - 1, 1000 / 60, TJAPlayer3.Timer);
+							if (!CResultCharacter.tIsCounterProcessing(p, CResultCharacter.ECharacterResult.FAILED_IN))
+								CResultCharacter.tMenuResetTimer(p, CResultCharacter.ECharacterResult.FAILED_IN);
+							else if (CResultCharacter.tIsCounterEnded(p, CResultCharacter.ECharacterResult.FAILED_IN)
+								&& !CResultCharacter.tIsCounterProcessing(p, CResultCharacter.ECharacterResult.FAILED))
+								CResultCharacter.tMenuResetTimer(p, CResultCharacter.ECharacterResult.FAILED);
 						}
 
 
@@ -625,25 +613,22 @@ namespace TJAPlayer3
 
 					#region [Character Animations]
 
+					int _charaId = TJAPlayer3.NamePlateConfig.data.Character[TJAPlayer3.GetActualPlayer(p)];
 
-					if (this.ctDonchan_Clear[p].b進行中)
-					{
-						DisplayCharacter(TJAPlayer3.Tx.Result_Donchan_Clear[ctDonchan_Clear[p].n現在の値], 202, 532, pos, 0.8f);
-					}
-					else if (this.ctDonchan_Failed[p].b進行中)
-					{
-						DisplayCharacter(TJAPlayer3.Tx.Result_Donchan_Failed[ctDonchan_Failed[p].n現在の値], 202, 532, pos, 0.8f);
-					}
-					else if (this.ctDonchan_Failed_In[p].b進行中)
-					{
-						DisplayCharacter(TJAPlayer3.Tx.Result_Donchan_Failed_In[ctDonchan_Failed_In[p].n現在の値], 202, 532, pos, 0.8f);
-					}
+					int chara_x = TJAPlayer3.Skin.Characters_Result_X[_charaId][pos];
+					int chara_y = TJAPlayer3.Skin.Characters_Result_Y[_charaId][pos];
+
+					if (CResultCharacter.tIsCounterProcessing(p, CResultCharacter.ECharacterResult.CLEAR))
+						CResultCharacter.tMenuDisplayCharacter(p, chara_x, chara_y, CResultCharacter.ECharacterResult.CLEAR, pos);
+					else if (CResultCharacter.tIsCounterProcessing(p, CResultCharacter.ECharacterResult.FAILED))
+						CResultCharacter.tMenuDisplayCharacter(p, chara_x, chara_y, CResultCharacter.ECharacterResult.FAILED, pos);
+					else if (CResultCharacter.tIsCounterProcessing(p, CResultCharacter.ECharacterResult.FAILED_IN))
+						CResultCharacter.tMenuDisplayCharacter(p, chara_x, chara_y, CResultCharacter.ECharacterResult.FAILED_IN, pos);
 					else
-					{
-						DisplayCharacter(TJAPlayer3.Tx.Result_Donchan_Normal[ctDonchan_Normal[p].n現在の値], 202, 532, pos, 0.8f);
-					}
+						CResultCharacter.tMenuDisplayCharacter(p, chara_x, chara_y, CResultCharacter.ECharacterResult.NORMAL, pos);
 
 					#endregion
+
 
 					#region [PuchiChara]
 
@@ -808,10 +793,6 @@ namespace TJAPlayer3
 		public CCounter ctMountain_ClearIn;
 		public CCounter ctBackgroundAnime;
 		public CCounter ctBackgroundAnime_Clear;
-		private CCounter[] ctDonchan_Normal;
-		private CCounter[] ctDonchan_Clear;
-		private CCounter[] ctDonchan_Failed;
-		private CCounter[] ctDonchan_Failed_In;
 
 		private int RandomText;
 
@@ -872,25 +853,6 @@ namespace TJAPlayer3
 				x += 22;
 			}
 		}
-
-
-		public void DisplayCharacter(CTexture tex, int x, int y, int pos, float ratio)
-        {
-			if (tex == null)
-				return;
-
-			tex.vc拡大縮小倍率.X = ratio;
-			tex.vc拡大縮小倍率.Y = ratio;
-
-			if (pos == 0)
-				tex.t2D中心基準描画(TJAPlayer3.app.Device, x, y);
-			else
-				tex.t2D左右反転描画(TJAPlayer3.app.Device, 
-					1340 - x - tex.szテクスチャサイズ.Width / 2, 
-					y - tex.szテクスチャサイズ.Height / 2);
-		}
-
-
 		private void t大文字表示(int x, int y, string str)
 		{
 			this.t大文字表示(x, y, str, false);

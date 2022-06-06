@@ -68,7 +68,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>TJAPlayer3.manifest</ApplicationManifest>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
@@ -91,7 +93,6 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Bass.Net">
       <HintPath>..\Test\dll\Bass.Net.dll</HintPath>
@@ -106,6 +107,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -120,7 +122,12 @@
     <Compile Include="Animations\FadeOut.cs" />
     <Compile Include="Animations\IAnimatable.cs" />
     <Compile Include="Animations\Linear.cs" />
+    <Compile Include="Character\CResultCharacter.cs" />
+    <Compile Include="Character\CMenuCharacter.cs" />
     <Compile Include="Common\CCrypto.cs" />
+    <Compile Include="Common\CHitSounds.cs" />
+    <Compile Include="Common\CVersionList.cs" />
+    <Compile Include="Common\RecentlyPlayedSongs.cs" />
     <Compile Include="Common\ModalQueue.cs" />
     <Compile Include="Common\Modal.cs" />
     <Compile Include="Common\CSongDict.cs" />
@@ -140,6 +147,9 @@
     <Compile Include="I18N\CLang_jp.cs" />
     <Compile Include="I18N\CLang_zh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stages\01.StartUp\CPuchichara.cs" />
+    <Compile Include="Stages\07.Game\Taiko\NotesManager.cs" />
+    <Compile Include="Stages\XX.Templates\CStageTemplate.cs" />
     <EmbeddedResource Include="Properties\Discord.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Discord.Designer.cs</LastGenOutput>
@@ -161,6 +171,8 @@
     </Compile>
     <None Include="app.config" />
     <Compile Include="I18N\ILang.cs" />
+    <None Include="TJAPlayer3.manifest" />
+    <None Include="DTXManiaGR.exe.x86.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -199,6 +211,7 @@
     <Compile Include="Songs\C曲リストノード.cs" />
     <Compile Include="Stages\01.StartUp\CStage起動.cs" />
     <Compile Include="Stages\02.Title\CActEnumSongs.cs" />
+    <Compile Include="Stages\02.Title\CMainMenuTab.cs" />
     <Compile Include="Stages\02.Title\CStageタイトル.cs" />
     <Compile Include="Stages\04.Config\CActConfigKeyAssign.cs" />
     <Compile Include="Stages\04.Config\CActConfigList.cs" />
@@ -259,7 +272,8 @@
     <Compile Include="Stages\07.Game\Taiko\CAct演奏Drums連打キャラ.cs" />
     <Compile Include="Stages\07.Game\Taiko\FlyingNotes.cs" />
     <Compile Include="Stages\07.Game\Taiko\LaneFlash.cs" />
-    <Compile Include="Stages\07.Game\Taiko\PuchiChara.cs" />
+    <Compile Include="Character\PuchiChara.cs" />
+    <Compile Include="Stages\07.Game\Taiko\ModIcons.cs" />
     <Compile Include="Stages\07.Game\Taiko\Rainbow.cs" />
     <Compile Include="Stages\07.Game\Taiko\CAct演奏DrumsチップファイアD.cs" />
     <Compile Include="Stages\07.Game\CAct演奏PauseMenu.cs" />
@@ -285,6 +299,7 @@
     <Compile Include="Stages\10.ChangeSkin\CStageChangeSkin.cs" />
     <Compile Include="Stages\11.Heya\CStageHeya.cs" />
     <Compile Include="Stages\12.OnlineLounge\API.cs" />
+    <Compile Include="Stages\12.OnlineLounge\CStageOnlineLounge.cs" />
     <Compile Include="Stages\CActDFPFont.cs" />
     <Compile Include="Stages\CActFIFOBlack.cs" />
     <Compile Include="Stages\CActFIFOStart.cs" />

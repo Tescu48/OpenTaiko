@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace TJAPlayer3
 {
+    [Serializable()]
     internal class CSongUniqueID
     {
         public CSongUniqueID(string path)
@@ -31,6 +32,7 @@ namespace TJAPlayer3
         public void tAttachOnlineAddress(string url)
         {
             data.url = url;
+            tSaveFile();
         }
 
         public void tGenerateUniqueID()

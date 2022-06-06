@@ -10,6 +10,7 @@
 *.swp
 *.DotSettings.user
 /packages
+/Test/Cache
 /Test/Capture_img
 /Test/Config.ini
 /Test/bs1770gain**
@@ -18,7 +19,9 @@
 /Test/dll/FDK.dll
 /Test/NamePlate.json
 /Test/Favorite.json
+/Test/RecentlyPlayedSongs.json
 /Test/SongsIgnored/*
+/Test/SongsIgnored2/*
 /Test/xadec.dll
 /Test/SoundDecoder.dll
 /Test/msvcr90.dll
@@ -34,3 +37,5 @@
 /Test/System/0.JpnNijiiro
 /Test/System/BasicStyle
 /Test/System/OpenSkin
+uniqueID.json
+*.score.ini

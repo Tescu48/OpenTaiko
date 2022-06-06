@@ -158,7 +158,7 @@ namespace TJAPlayer3
             public int[] TitleType = { 0, 0 };
 
             [JsonProperty("puchiChara")]
-            public int[] PuchiChara = { 0, 0 };
+            public string[] PuchiChara = { "0", "0" };
 
             [JsonProperty("medals")]
             public int[] Medals = { 0, 0 };
@@ -173,10 +173,10 @@ namespace TJAPlayer3
             public Dictionary<string, CNamePlateTitle>[] NamePlateTitles = new Dictionary<string, CNamePlateTitle>[2];
 
             [JsonProperty("unlockedPuchicharas")]
-            public List<int>[] UnlockedPuchicharas = new List<int>[2]
+            public List<string>[] UnlockedPuchicharas = new List<string>[2]
             {
-                new List<int>(),
-                new List<int>()
+                new List<string>(),
+                new List<string>()
             };
 
         }

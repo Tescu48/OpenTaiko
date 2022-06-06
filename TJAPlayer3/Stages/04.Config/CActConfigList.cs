@@ -59,8 +59,9 @@ namespace TJAPlayer3
 		public int n現在の選択項目;
 
 
-		// メソッド
+		// General system options
 		#region [ t項目リストの設定_System() ]
+
 		public void t項目リストの設定_System(bool refresh = true)
 		{
 			this.tConfigIniへ記録する();
@@ -204,7 +205,7 @@ namespace TJAPlayer3
 			// #24820 2013.1.3 yyagi
 			this.iSystemSoundType = new CItemList(CLangManager.LangInstance.GetString(10043), CItemList.Eパネル種別.通常, TJAPlayer3.ConfigIni.nSoundDeviceType,
 				CLangManager.LangInstance.GetString(43),
-				new string[] { "DSound", "ASIO", "WASAPI" });
+				new string[] { "DSound", "ASIO", "WASAPI Exclusive", "WASAPI Shared" });
 			this.list項目リスト.Add(this.iSystemSoundType);
 
 			// #24820 2013.1.15 yyagi
@@ -279,7 +280,7 @@ namespace TJAPlayer3
 		#endregion
 
 
-
+		// Gameplay options 
 		#region [ t項目リストの設定_Drums() ]
 
 		public void t項目リストの設定_Drums()
@@ -293,16 +294,6 @@ namespace TJAPlayer3
 				CLangManager.LangInstance.GetString(3));
 			this.list項目リスト.Add( this.iDrumsReturnToMenu );
 
-			#region [ AutoPlay ]
-
-			this.iTaikoAutoPlay = new CItemToggle(CLangManager.LangInstance.GetString(56), TJAPlayer3.ConfigIni.b太鼓パートAutoPlay,
-				CLangManager.LangInstance.GetString(57));
-			this.list項目リスト.Add( this.iTaikoAutoPlay );
-
-			this.iTaikoAutoPlay2P = new CItemToggle(CLangManager.LangInstance.GetString(58), TJAPlayer3.ConfigIni.b太鼓パートAutoPlay2P,
-				CLangManager.LangInstance.GetString(59));
-			this.list項目リスト.Add( this.iTaikoAutoPlay2P );
-
 			this.iRollsPerSec = new CItemInteger(CLangManager.LangInstance.GetString(60), 0, 1000, TJAPlayer3.ConfigIni.nRollsPerSec,
 				CLangManager.LangInstance.GetString(61));
 			this.list項目リスト.Add(this.iRollsPerSec);
@@ -311,40 +302,13 @@ namespace TJAPlayer3
 				CLangManager.LangInstance.GetString(13));
 			this.list項目リスト.Add(this.iAILevel);
 
-
-			/*
-			this.iTaikoAutoRoll = new CItemToggle(CLangManager.LangInstance.GetString(60), TJAPlayer3.ConfigIni.bAuto先生の連打,
-				CLangManager.LangInstance.GetString(61));
-			this.list項目リスト.Add( this.iTaikoAutoRoll );
-			*/
-
-			#endregion
-
-			this.iDrumsScrollSpeed = new CItemInteger(CLangManager.LangInstance.GetString(62), 0, 0x7cf, TJAPlayer3.ConfigIni.n譜面スクロール速度.Drums,
-				CLangManager.LangInstance.GetString(63));
-			this.list項目リスト.Add( this.iDrumsScrollSpeed );
-
 			this.iSystemRisky = new CItemInteger(CLangManager.LangInstance.GetString(64), 0, 10, TJAPlayer3.ConfigIni.nRisky,
 				CLangManager.LangInstance.GetString(65));
 			this.list項目リスト.Add( this.iSystemRisky );
 
-			this.iTaikoRandom = new CItemList(CLangManager.LangInstance.GetString(66), CItemBase.Eパネル種別.通常, (int) TJAPlayer3.ConfigIni.eRandom.Taiko,
-				CLangManager.LangInstance.GetString(67),
-				new string[] { "OFF", "RANDOM", "MIRROR", "SUPER", "HYPER" } );
-			this.list項目リスト.Add( this.iTaikoRandom );
-
-			this.iTaikoStealth = new CItemList(CLangManager.LangInstance.GetString(68), CItemBase.Eパネル種別.通常, (int) TJAPlayer3.ConfigIni.eSTEALTH,
-				CLangManager.LangInstance.GetString(69),
-				new string[] { "OFF", "DORON", "STEALTH" } );
-			this.list項目リスト.Add( this.iTaikoStealth );
-
 			this.iTaikoNoInfo = new CItemToggle(CLangManager.LangInstance.GetString(70), TJAPlayer3.ConfigIni.bNoInfo,
 				CLangManager.LangInstance.GetString(71));
 			this.list項目リスト.Add( this.iTaikoNoInfo );
-
-			this.iTaikoJust = new CItemToggle(CLangManager.LangInstance.GetString(72), TJAPlayer3.ConfigIni.bJust,
-				CLangManager.LangInstance.GetString(73));
-			this.list項目リスト.Add( this.iTaikoJust );
 
 			this.iDrumsTight = new CItemToggle(CLangManager.LangInstance.GetString(74), TJAPlayer3.ConfigIni.bTight,
 				CLangManager.LangInstance.GetString(75));
@@ -356,18 +320,27 @@ namespace TJAPlayer3
 
 
 			// #23580 2011.1.3 yyagi
-			this.iInputAdjustTimeMs = new CItemInteger(CLangManager.LangInstance.GetString(78), -99, 99, TJAPlayer3.ConfigIni.nInputAdjustTimeMs,
+			
+			/*
+			this.iInputAdjustTimeMs = new CItemInteger(CLangManager.LangInstance.GetString(78), -9999, 9999, TJAPlayer3.ConfigIni.nInputAdjustTimeMs,
 				CLangManager.LangInstance.GetString(79));
 			this.list項目リスト.Add( this.iInputAdjustTimeMs );
+			*/
 
-			this.iGlobalOffsetMs = new CItemInteger(CLangManager.LangInstance.GetString(14), -99, 99, TJAPlayer3.ConfigIni.nGlobalOffsetMs,
+			this.iGlobalOffsetMs = new CItemInteger(CLangManager.LangInstance.GetString(14), -9999, 9999, TJAPlayer3.ConfigIni.nGlobalOffsetMs,
 				CLangManager.LangInstance.GetString(15));
 			this.list項目リスト.Add(this.iGlobalOffsetMs);
 
 
 			this.iTaikoDefaultCourse = new CItemList(CLangManager.LangInstance.GetString(80), CItemBase.Eパネル種別.通常, TJAPlayer3.ConfigIni.nDefaultCourse,
 				CLangManager.LangInstance.GetString(81),
-                new string[] { "Easy", "Normal", "Hard", "Oni", "Edit" });
+                new string[] {
+					CLangManager.LangInstance.GetString(1040),
+					CLangManager.LangInstance.GetString(1041),
+					CLangManager.LangInstance.GetString(1042),
+					CLangManager.LangInstance.GetString(1043),
+					CLangManager.LangInstance.GetString(1044),
+					CLangManager.LangInstance.GetString(1045) });
             this.list項目リスト.Add(this.iTaikoDefaultCourse);
 
             this.iTaikoScoreMode = new CItemList(CLangManager.LangInstance.GetString(82), CItemBase.Eパネル種別.通常, TJAPlayer3.ConfigIni.nScoreMode,
@@ -411,6 +384,13 @@ namespace TJAPlayer3
 		}
 
 		#endregion
+
+
+
+
+
+
+
 
 		/// <summary>Sud+Hidの初期値を返す</summary>
 		/// <param name="eInst"></param>
@@ -509,6 +489,33 @@ namespace TJAPlayer3
 			else if ( this.list項目リスト[ this.n現在の選択項目 ] == this.iKeyAssignTaikoRBlue2P )
 			{
 				TJAPlayer3.stageコンフィグ.tパッド選択通知( EKeyConfigPart.DRUMS, EKeyConfigPad.RBlue2P );
+			}
+
+			// Konga claps
+			else if (this.list項目リスト[this.n現在の選択項目] == this.iKeyAssignKongaClap)
+			{
+				TJAPlayer3.stageコンフィグ.tパッド選択通知(EKeyConfigPart.DRUMS, EKeyConfigPad.Clap);
+			}
+			else if (this.list項目リスト[this.n現在の選択項目] == this.iKeyAssignKongaClap2P)
+			{
+				TJAPlayer3.stageコンフィグ.tパッド選択通知(EKeyConfigPart.DRUMS, EKeyConfigPad.Clap2P);
+			}
+
+			else if (this.list項目リスト[this.n現在の選択項目] == this.iKeyAssignDecide)
+			{
+				TJAPlayer3.stageコンフィグ.tパッド選択通知(EKeyConfigPart.DRUMS, EKeyConfigPad.Decide);
+			}
+			else if (this.list項目リスト[this.n現在の選択項目] == this.iKeyAssignCancel)
+			{
+				TJAPlayer3.stageコンフィグ.tパッド選択通知(EKeyConfigPart.DRUMS, EKeyConfigPad.Cancel);
+			}
+			else if (this.list項目リスト[this.n現在の選択項目] == this.iKeyAssignLeftChange)
+			{
+				TJAPlayer3.stageコンフィグ.tパッド選択通知(EKeyConfigPart.DRUMS, EKeyConfigPad.LeftChange);
+			}
+			else if (this.list項目リスト[this.n現在の選択項目] == this.iKeyAssignRightChange)
+			{
+				TJAPlayer3.stageコンフィグ.tパッド選択通知(EKeyConfigPart.DRUMS, EKeyConfigPad.RightChange);
 			}
 
 			else if ( this.list項目リスト[ this.n現在の選択項目 ] == this.iKeyAssignSystemCapture )
@@ -681,7 +688,29 @@ namespace TJAPlayer3
 				CLangManager.LangInstance.GetString(10014));
 			this.list項目リスト.Add( this.iKeyAssignTaikoRBlue2P );
 
-            OnListMenuの初期化();
+			this.iKeyAssignKongaClap = new CItemBase(CLangManager.LangInstance.GetString(10060),
+				CLangManager.LangInstance.GetString(10061));
+			this.list項目リスト.Add(this.iKeyAssignKongaClap);
+
+			this.iKeyAssignKongaClap2P = new CItemBase(CLangManager.LangInstance.GetString(10062),
+				CLangManager.LangInstance.GetString(10063));
+			this.list項目リスト.Add(this.iKeyAssignKongaClap2P);
+
+			this.iKeyAssignDecide = new CItemBase(CLangManager.LangInstance.GetString(10064),
+				CLangManager.LangInstance.GetString(10065));
+			this.list項目リスト.Add(this.iKeyAssignDecide);
+			this.iKeyAssignCancel = new CItemBase(CLangManager.LangInstance.GetString(10066),
+				CLangManager.LangInstance.GetString(10067));
+			this.list項目リスト.Add(this.iKeyAssignCancel);
+
+			this.iKeyAssignLeftChange = new CItemBase(CLangManager.LangInstance.GetString(10068),
+				CLangManager.LangInstance.GetString(10069));
+			this.list項目リスト.Add(this.iKeyAssignLeftChange);
+			this.iKeyAssignRightChange = new CItemBase(CLangManager.LangInstance.GetString(10070),
+				CLangManager.LangInstance.GetString(10071));
+			this.list項目リスト.Add(this.iKeyAssignRightChange);
+
+			OnListMenuの初期化();
 			this.n現在の選択項目 = 0;
 			this.eメニュー種別 = Eメニュー種別.KeyAssignDrums;
 		}
@@ -814,6 +843,9 @@ namespace TJAPlayer3
 						break;
 					case 2:
 						soundDeviceType = ESoundDeviceType.ExclusiveWASAPI;
+						break;
+					case 3:
+						soundDeviceType = ESoundDeviceType.SharedWASAPI;
 						break;
 					default:
 						soundDeviceType = ESoundDeviceType.Unknown;
@@ -1103,12 +1135,12 @@ namespace TJAPlayer3
 							//CDTXMania.stageコンフィグ.actFont.t文字列描画( x + 210, y + 12, d.ToString( "0.000" ), ( n行番号 == 0 ) && this.b要素値にフォーカス中 );
 							strParam = d.ToString( "0.000" );
 						}
-						else if ( this.list項目リスト[ nItem ] == this.iDrumsScrollSpeed)
+						/*else if ( this.list項目リスト[ nItem ] == this.iDrumsScrollSpeed)
 						{
-							float f = ( ( (CItemInteger) this.list項目リスト[ nItem ] ).n現在の値 + 1 ) * 0.5f;
+							float f = ( ( (CItemInteger) this.list項目リスト[ nItem ] ).n現在の値 + 1 ) / 10f;
 							//CDTXMania.stageコンフィグ.actFont.t文字列描画( x + 210, y + 12, f.ToString( "x0.0" ), ( n行番号 == 0 ) && this.b要素値にフォーカス中 );
 							strParam = f.ToString( "x0.0" );
-						}
+						}*/
 						else
 						{
 							//CDTXMania.stageコンフィグ.actFont.t文字列描画( x + 210, y + 12, ( (CItemInteger) this.list項目リスト[ nItem ] ).n現在の値.ToString(), ( n行番号 == 0 ) && this.b要素値にフォーカス中 );
@@ -1248,6 +1280,14 @@ namespace TJAPlayer3
 		private CItemBase iKeyAssignTaikoRRed2P;
 		private CItemBase iKeyAssignTaikoLBlue2P;
 		private CItemBase iKeyAssignTaikoRBlue2P;
+
+		private CItemBase iKeyAssignKongaClap;
+		private CItemBase iKeyAssignKongaClap2P;
+
+		private CItemBase iKeyAssignDecide;
+		private CItemBase iKeyAssignCancel;
+		private CItemBase iKeyAssignLeftChange;
+		private CItemBase iKeyAssignRightChange;
 
 		#endregion
 		private CItemToggle iLogOutputLog;
@@ -1478,8 +1518,8 @@ namespace TJAPlayer3
 		}
 		private void tConfigIniへ記録する_Drums()
 		{
-            TJAPlayer3.ConfigIni.b太鼓パートAutoPlay = this.iTaikoAutoPlay.bON;
-            TJAPlayer3.ConfigIni.b太鼓パートAutoPlay2P = this.iTaikoAutoPlay2P.bON;
+            //TJAPlayer3.ConfigIni.b太鼓パートAutoPlay = this.iTaikoAutoPlay.bON;
+            //TJAPlayer3.ConfigIni.b太鼓パートAutoPlay2P = this.iTaikoAutoPlay2P.bON;
 			//TJAPlayer3.ConfigIni.bAuto先生の連打 = this.iTaikoAutoRoll.bON;
 			TJAPlayer3.ConfigIni.nRollsPerSec = this.iRollsPerSec.n現在の値;
 
@@ -1487,11 +1527,11 @@ namespace TJAPlayer3
 			for (int i = 0; i < 2; i++)
 				TJAPlayer3.NamePlate.tNamePlateRefreshTitles(i);
 
-			TJAPlayer3.ConfigIni.n譜面スクロール速度.Drums = this.iDrumsScrollSpeed.n現在の値;
+			//TJAPlayer3.ConfigIni.nScrollSpeed[TJAPlayer3.SaveFile] = this.iDrumsScrollSpeed.n現在の値;
             
 			TJAPlayer3.ConfigIni.bTight = this.iDrumsTight.bON;
 
-		    TJAPlayer3.ConfigIni.nInputAdjustTimeMs = this.iInputAdjustTimeMs.n現在の値;
+		    //TJAPlayer3.ConfigIni.nInputAdjustTimeMs = this.iInputAdjustTimeMs.n現在の値;
 
 			TJAPlayer3.ConfigIni.nGlobalOffsetMs = this.iGlobalOffsetMs.n現在の値;
 
@@ -1506,10 +1546,12 @@ namespace TJAPlayer3
             TJAPlayer3.ConfigIni.nBranchAnime = this.iTaikoBranchAnime.n現在選択されている項目番号;
             //CDTXMania.ConfigIni.bHispeedRandom = this.iTaikoHispeedRandom.bON;
             TJAPlayer3.ConfigIni.bNoInfo = this.iTaikoNoInfo.bON;
-            TJAPlayer3.ConfigIni.eRandom.Taiko = (Eランダムモード)this.iTaikoRandom.n現在選択されている項目番号;
-            TJAPlayer3.ConfigIni.eSTEALTH = (Eステルスモード)this.iTaikoStealth.n現在選択されている項目番号;
+
+            //TJAPlayer3.ConfigIni.eRandom.Taiko = (Eランダムモード)this.iTaikoRandom.n現在選択されている項目番号;
+            //TJAPlayer3.ConfigIni.eSTEALTH = (Eステルスモード)this.iTaikoStealth.n現在選択されている項目番号;
+
             TJAPlayer3.ConfigIni.eGameMode = (EGame)this.iTaikoGameMode.n現在選択されている項目番号;
-            TJAPlayer3.ConfigIni.bJust = this.iTaikoJust.bON;
+            //TJAPlayer3.ConfigIni.bJust = this.iTaikoJust.bON;
             TJAPlayer3.ConfigIni.bJudgeCountDisplay = this.iTaikoJudgeCountDisp.bON;
             TJAPlayer3.ConfigIni.b大音符判定 = this.iTaikoBigNotesJudge.bON;
 		}
